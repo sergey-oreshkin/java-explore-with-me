@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_categories
+      author: Sergey Oreshkin
+      changes:
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_requests
+      author: Sergey Oreshkin
+      changes:
+        - createTable:
+            tableName: requests
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_requests_user
+                    references: users(id)
+              - column:
+                  name: event_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_request_event
+                    references: events(id)
+              - column:
+                  name: approved
+                  type: bool
+        - addPrimaryKey:
+            tableName: requests
+            columnNames: user_id, event_id

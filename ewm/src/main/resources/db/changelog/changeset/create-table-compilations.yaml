@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_compilations
+      author: Sergey Oreshkin
+      changes:
+        - createTable:
+            tableName: compilations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(1024)
+              - column:
+                  name: pinned
+                  type: bool
+                  constraints:
+                    nullable: false
