@@ -31,7 +31,8 @@ public class UserServiceImpl {
         try {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
-            throw new ConflictException("Email already in use", user.getEmail());
+            throw new ConflictException("Email or name already in use",
+                    String.format("email=%s, name=%s",user.getEmail(), user.getName()));
         }
     }
 
@@ -39,7 +40,7 @@ public class UserServiceImpl {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new NotFoundException("Could not be deleted, user with given id not found", String.valueOf(id));
+            throw new NotFoundException("User not found", String.format("id=%d", id));
         }
     }
 }

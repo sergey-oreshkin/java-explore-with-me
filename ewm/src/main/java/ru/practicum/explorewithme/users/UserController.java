@@ -23,10 +23,10 @@ public class UserController {
     private final UserMapper mapper;
 
     @GetMapping
-    public List<UserDto> get(@RequestParam(name = "idx", required = false) List<Long> idx,
+    public List<UserDto> get(@RequestParam(name = "ids", required = false) List<Long> ids,
                              @RequestParam(name = "from", required = false) Integer from,
                              @RequestParam(name = "size", required = false) Integer size) {
-        return mapper.toDto(userService.get(from, size, idx));
+        return mapper.toDto(userService.get(from, size, ids));
     }
 
     @PostMapping
