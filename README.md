@@ -1,4 +1,4 @@
-# java-explore-with-me
+git checkout# java-explore-with-me
 Server for ExploreWithMe project.
 
 ### Порядок разработки фич
