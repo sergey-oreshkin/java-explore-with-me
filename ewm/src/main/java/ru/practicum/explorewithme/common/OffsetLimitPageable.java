@@ -33,7 +33,8 @@ public class OffsetLimitPageable implements Pageable {
         size = Optional.ofNullable(size).orElse(0);
         from = Optional.ofNullable(from).orElse(0);
         if (size < 1 || from < 0) {
-            throw new ValidationException("From must be positive and size must be more then 0");
+            throw new ValidationException("From must be positive and size must be more then 0",
+                    String.format("from=%s, size=%s", from, size));
         }
         return new OffsetLimitPageable(from, size, sort);
     }

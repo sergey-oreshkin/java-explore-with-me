@@ -26,7 +26,6 @@ public class UserController {
     public List<UserDto> get(@RequestParam(name = "idx", required = false) List<Long> idx,
                              @RequestParam(name = "from", required = false) Integer from,
                              @RequestParam(name = "size", required = false) Integer size) {
-        System.out.println("idx - "+idx);
         return mapper.toDto(userService.get(from, size, idx));
     }
 
