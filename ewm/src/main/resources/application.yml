@@ -6,3 +6,6 @@ spring:
     password: test
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+
+app:
+  minTimeToEventMinutes: 120

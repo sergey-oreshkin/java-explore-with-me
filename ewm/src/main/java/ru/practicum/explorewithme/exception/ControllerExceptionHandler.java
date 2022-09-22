@@ -12,7 +12,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import ru.practicum.explorewithme.exception.dto.ErrorDto;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 
 @RestControllerAdvice
@@ -79,7 +78,7 @@ public class ControllerExceptionHandler {
         return ErrorDto.builder()
                 .errors(Collections.emptyList())
                 .message(ex.getMessage())
-                .reason("")
+                .reason(ex.getRejectedValue())
                 .status(HttpStatus.BAD_REQUEST)
                 .timestamp(LocalDateTime.now())
                 .build();
