@@ -1,5 +1,5 @@
 package ru.practicum.explorewithme.event.dto;
 
 public enum EventState {
-    PENDING, PUBLISHED, CANCELED
+    PENDING, PUBLISHED, REJECTED, CANCELED
 }

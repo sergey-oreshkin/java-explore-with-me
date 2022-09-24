@@ -13,8 +13,8 @@ public class UserFactoryImpl implements UserFactory {
     private final UserRepository userRepository;
 
     @Override
-    public User getById(Long id){
+    public User getById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException("User not found", String.format("id=%d", id)));
+                .orElseThrow(() -> new NotFoundException("User not found", String.format("id=%d", id)));
     }
 }

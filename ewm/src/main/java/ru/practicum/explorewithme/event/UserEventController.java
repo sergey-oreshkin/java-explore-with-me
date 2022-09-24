@@ -7,7 +7,7 @@ import ru.practicum.explorewithme.event.db.Event;
 import ru.practicum.explorewithme.event.dto.EventDto;
 import ru.practicum.explorewithme.event.dto.NewEventDto;
 import ru.practicum.explorewithme.event.service.EventMapper;
-import ru.practicum.explorewithme.event.service.EventServiceImpl;
+import ru.practicum.explorewithme.event.service.EventService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -19,7 +19,7 @@ import java.util.List;
 @Validated
 public class UserEventController {
 
-    private final EventServiceImpl eventService;
+    private final EventService eventService;
 
     private final EventMapper mapper;
 
@@ -40,5 +40,15 @@ public class UserEventController {
                                  @RequestParam(name = "from", required = false) Integer from,
                                  @RequestParam(name = "size", required = false) Integer size) {
         return mapper.toDto(eventService.getAll(userId, from, size));
+    }
+
+    @GetMapping("{eventId}")
+    public EventDto get(@PathVariable @NotNull Long userId, @PathVariable @NotNull Long eventId) {
+        return mapper.toDto(eventService.get(userId, eventId));
+    }
+
+    @PatchMapping("{eventId}")
+    public EventDto cancel(@PathVariable @NotNull Long userId, @PathVariable @NotNull Long eventId) {
+        return mapper.toDto(eventService.cancel(userId, eventId));
     }
 }
