@@ -11,12 +11,17 @@ import ru.practicum.explorewithme.event.dto.EventState;
 import ru.practicum.explorewithme.exception.ConflictException;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
+import ru.practicum.explorewithme.request.db.Request;
+import ru.practicum.explorewithme.request.db.RequestRepository;
+import ru.practicum.explorewithme.request.dto.RequestState;
 import ru.practicum.explorewithme.users.db.User;
 import ru.practicum.explorewithme.users.factory.UserFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +32,8 @@ public class EventServiceImpl implements EventService {
     private final EventMapper mapper;
 
     private final UserFactory userFactory;
+
+    private final RequestRepository requestRepository;
 
     @Value("${app.minTimeToEventMinutes}")
     private int minTimeToEventMinutes;
@@ -66,7 +73,7 @@ public class EventServiceImpl implements EventService {
     public Event get(Long userId, Long eventId) {
         User user = userFactory.getById(userId);
         return eventRepository.findByIdAndInitiator(eventId, user)
-                .orElseThrow(() -> new NotFoundException("No Event found", String.format("EventId=%d, UserId=%d", eventId, userId)));
+                .orElseThrow(() -> new NotFoundException("No Event found", String.format("EventId=%d, InitiatorId=%d", eventId, userId)));
     }
 
     @Override
@@ -90,13 +97,74 @@ public class EventServiceImpl implements EventService {
     public Event approve(Long eventId, String stateString) {
         if ("reject".equals(stateString) || "publish".equals(stateString)) {
             EventState state = EventState.valueOf((stateString + "ed").toUpperCase());
-            Event event = eventRepository.findById(eventId)
-                    .orElseThrow(() -> new NotFoundException("Event not found", String.format("id=%d", eventId)));
+            Event event = getEventOrThrow(eventId);
             event.setState(state);
             event.setPublished(LocalDateTime.now());
             return eventRepository.save(event);
         }
         throw new ValidationException("State must be reject or publish", stateString);
+    }
+
+    @Override
+    public List<Request> getRequests(Long userId, Long eventId) {
+        Event event = getEventOrThrow(eventId);
+        if (!Objects.equals(event.getInitiator().getId(), userId)) {
+            throw new ValidationException("Only initiator can get requests", String.format("initiatorId=%d", userId));
+        }
+        return new ArrayList<>(event.getRequests());
+    }
+
+    @Override
+    public Request confirm(Long userId, Long eventId, Long reqId) {
+        Event event = getEventOrThrow(eventId);
+        if (!event.getRequestModeration()) {
+            throw new ConflictException("The event does not require confirmation", "request moderation is false");
+        }
+        if (!Objects.equals(event.getInitiator().getId(), userId)) {
+            throw new ValidationException("Only initiator can confirm the request", String.format("initiatorId=%d", userId));
+        }
+        long confirmedRequestsCount = event.getRequests().stream().filter(r -> r.getState() == RequestState.CONFIRMED).count();
+        if (confirmedRequestsCount >= event.getParticipantLimit()) {
+            throw new ConflictException("Request limit has been reached", String.format("Request limit=%d", event.getParticipantLimit()));
+        }
+        Request request = requestRepository.findById(reqId)
+                .orElseThrow(() -> new NotFoundException("Request not found", String.format("id=%d", reqId)));
+        if (!event.getRequests().contains(request)) {
+            throw new ValidationException("Wrong event for the request", String.format("EventId=%d, RequestId=%d", eventId, reqId));
+        }
+        request.setState(RequestState.CONFIRMED);
+        requestRepository.save(request);
+
+        List<Request> requests = requestRepository.findAllByEventId(eventId);
+
+        confirmedRequestsCount = requests.stream().filter(r -> r.getState() == RequestState.CONFIRMED).count();
+        if (confirmedRequestsCount >= event.getParticipantLimit()) {
+            requests.stream().filter(r -> r.getState() != RequestState.CONFIRMED).forEach(requestRepository::delete);
+        }
+        return request;
+    }
+
+    @Override
+    public Request reject(Long userId, Long eventId, Long reqId) {
+        Event event = getEventOrThrow(eventId);
+        if (!event.getRequestModeration()) {
+            throw new ConflictException("The event does not require confirmation", "request moderation is false");
+        }
+        if (!Objects.equals(event.getInitiator().getId(), userId)) {
+            throw new ValidationException("Only initiator can confirm the request", String.format("initiatorId=%d", userId));
+        }
+        Request request = requestRepository.findById(reqId)
+                .orElseThrow(() -> new NotFoundException("Request not found", String.format("id=%d", reqId)));
+        if (!event.getRequests().contains(request)) {
+            throw new ValidationException("Wrong event for the request", String.format("EventId=%d, RequestId=%d", eventId, reqId));
+        }
+        requestRepository.delete(request);
+        return request;
+    }
+
+    private Event getEventOrThrow(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event not found", String.format("id=%d", eventId)));
     }
 
     private void validateEventDateOrThrow(LocalDateTime eventDate) {

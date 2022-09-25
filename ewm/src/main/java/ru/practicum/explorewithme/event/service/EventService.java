@@ -2,6 +2,7 @@ package ru.practicum.explorewithme.event.service;
 
 import ru.practicum.explorewithme.event.db.Event;
 import ru.practicum.explorewithme.event.dto.EventState;
+import ru.practicum.explorewithme.request.db.Request;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,4 +22,10 @@ public interface EventService {
                        LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
     Event approve(Long eventId, String stateString);
+
+    List<Request> getRequests(Long userId, Long eventId);
+
+    Request confirm(Long userId, Long eventId, Long reqId);
+
+    Request reject(Long userId, Long eventId, Long reqId);
 }

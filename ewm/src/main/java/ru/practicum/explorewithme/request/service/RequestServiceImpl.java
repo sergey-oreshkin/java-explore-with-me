@@ -26,19 +26,19 @@ public class RequestServiceImpl {
                             String.format("userId=%d, eventId=%d", r.getRequester().getId(), r.getEvent().getId()));
                 });
         if (Objects.equals(request.getRequester().getId(), request.getEvent().getInitiator().getId())) {
-            throw new ConflictException("Participation not available for initiator", String.format("userId=%d", request.getEvent().getId()));
+            throw new ConflictException("Participation not available for initiator", String.format("InitiatorId=%d", request.getEvent().getInitiator().getId()));
         }
         if (request.getEvent().getState() != EventState.PUBLISHED) {
-            throw new ConflictException("Event is not published yet", String.format("Event state is ", request.getEvent().getState().toString()));
+            throw new ConflictException("Event is not published yet", String.format("Event state is %s", request.getEvent().getState().toString()));
         }
-        if (request.getEvent().getRequests().size() >= request.getEvent().getParticipantLimit()) {
-            throw new ConflictException("Request limit has been reached", String.format("Request limit=", request.getEvent().getParticipantLimit()));
+        long confirmedRequestsCount = request.getEvent().getRequests().stream().filter(r -> r.getState() == RequestState.CONFIRMED).count();
+        if (confirmedRequestsCount >= request.getEvent().getParticipantLimit()) {
+            throw new ConflictException("Request limit has been reached", String.format("Request limit=%d", request.getEvent().getParticipantLimit()));
         }
-
-        if (!request.getEvent().getRequestModeration()) {
-            request.setState(RequestState.ACCEPTED);
-        } else {
+        if (request.getEvent().getRequestModeration()) {
             request.setState(RequestState.PENDING);
+        } else {
+            request.setState(RequestState.CONFIRMED);
         }
         return requestRepository.save(request);
     }
