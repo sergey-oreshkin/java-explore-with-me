@@ -1,5 +1,4 @@
-git checkout# java-explore-with-me
-Server for ExploreWithMe project.
+## Server for ExploreWithMe project.
 
 ### Порядок разработки фич
   - схема БД
@@ -8,5 +7,5 @@ Server for ExploreWithMe project.
   - admin / events
   - users / events
   - users / requests
-  - public
   - admin / compilation
+  - public
