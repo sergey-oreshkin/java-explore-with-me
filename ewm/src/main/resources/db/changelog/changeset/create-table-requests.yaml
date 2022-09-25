@@ -7,7 +7,13 @@ databaseChangeLog:
             tableName: requests
             columns:
               - column:
-                  name: user_id
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: requester_id
                   type: bigint
                   constraints:
                     nullable: false
@@ -21,8 +27,8 @@ databaseChangeLog:
                     foreignKeyName: fk_request_event
                     references: events(id)
               - column:
-                  name: approved
-                  type: bool
-        - addPrimaryKey:
-            tableName: requests
-            columnNames: user_id, event_id
+                  name: state
+                  type: varchar(24)
+              - column:
+                  name: created
+                  type: timestamp

@@ -91,8 +91,9 @@ public class EventServiceImpl implements EventService {
         if ("reject".equals(stateString) || "publish".equals(stateString)) {
             EventState state = EventState.valueOf((stateString + "ed").toUpperCase());
             Event event = eventRepository.findById(eventId)
-                    .orElseThrow(()-> new NotFoundException("Event not found", String.format("id=%d", eventId)));
+                    .orElseThrow(() -> new NotFoundException("Event not found", String.format("id=%d", eventId)));
             event.setState(state);
+            event.setPublished(LocalDateTime.now());
             return eventRepository.save(event);
         }
         throw new ValidationException("State must be reject or publish", stateString);

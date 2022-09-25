@@ -1,5 +1,6 @@
 package ru.practicum.explorewithme.event.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,10 +8,13 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import ru.practicum.explorewithme.category.db.Category;
 import ru.practicum.explorewithme.event.dto.EventState;
+import ru.practicum.explorewithme.request.db.Request;
 import ru.practicum.explorewithme.users.db.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -57,4 +61,11 @@ public class Event {
     private Double latitude;
 
     private Double longitude;
+
+    @OneToMany(mappedBy = "event",
+            orphanRemoval = true,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
+    @JsonIgnore
+    Set<Request> requests = new HashSet<>();
 }
