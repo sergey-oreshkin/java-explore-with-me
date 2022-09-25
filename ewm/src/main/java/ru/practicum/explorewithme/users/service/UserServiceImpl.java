@@ -32,7 +32,7 @@ public class UserServiceImpl {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
             throw new ConflictException("Email or name already in use",
-                    String.format("email=%s, name=%s",user.getEmail(), user.getName()));
+                    String.format("email=%s, name=%s", user.getEmail(), user.getName()));
         }
     }
 

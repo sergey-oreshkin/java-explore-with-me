@@ -20,6 +20,11 @@ public interface EventMapper {
     @Mapping(target = "longitude", source = "eventDto.location.lon")
     Event toEntity(NewEventDto eventDto, Long userId);
 
+    @Mapping(target = "id", source = "eventDto.eventId")
+    @Mapping(target = "latitude", source = "eventDto.location.lat")
+    @Mapping(target = "longitude", source = "eventDto.location.lon")
+    Event toEntity(NewEventDto eventDto);
+
     @Mapping(target = "publishedOn", source = "event.published")
     @Mapping(target = "createdOn", source = "event.created")
     @Mapping(target = "location.lat", source = "event.latitude")

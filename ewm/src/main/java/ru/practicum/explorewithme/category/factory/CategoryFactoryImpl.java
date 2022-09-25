@@ -13,8 +13,8 @@ public class CategoryFactoryImpl implements CategoryFactory {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Category getById(Long id){
+    public Category getById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(()->new NotFoundException("Category not found", String.format("id=%d", id)));
+                .orElseThrow(() -> new NotFoundException("Category not found", String.format("id=%d", id)));
     }
 }
