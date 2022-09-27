@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.request.db.Request;
 import ru.practicum.explorewithme.request.dto.RequestDto;
 import ru.practicum.explorewithme.request.service.RequestMapper;
-import ru.practicum.explorewithme.request.service.RequestServiceImpl;
+import ru.practicum.explorewithme.request.service.RequestService;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RequestController {
 
-    private final RequestServiceImpl requestService;
+    private final RequestService requestService;
 
     private final RequestMapper mapper;
 

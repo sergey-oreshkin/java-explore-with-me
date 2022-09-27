@@ -1,5 +1,6 @@
 package ru.practicum.explorewithme.event.service;
 
+import ru.practicum.explorewithme.common.SortType;
 import ru.practicum.explorewithme.event.db.Event;
 import ru.practicum.explorewithme.event.dto.EventState;
 import ru.practicum.explorewithme.request.db.Request;
@@ -28,4 +29,9 @@ public interface EventService {
     Request confirm(Long userId, Long eventId, Long reqId);
 
     Request reject(Long userId, Long eventId, Long reqId);
+
+    Event getPublishedById(Long eventId);
+
+    List<Event> getAll(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable, SortType sortType,
+                       LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 }
