@@ -15,10 +15,11 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class RequestServiceImpl {
+public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
 
+    @Override
     public Request create(Request request) {
         requestRepository.findByRequesterIdAndEventId(request.getRequester().getId(), request.getEvent().getId())
                 .ifPresent(r -> {
@@ -43,10 +44,12 @@ public class RequestServiceImpl {
         return requestRepository.save(request);
     }
 
+    @Override
     public List<Request> getAll(Long userId) {
         return requestRepository.findAllByRequesterId(userId);
     }
 
+    @Override
     public Request cancel(Long userId, Long requestId) {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Request not found", String.format("requestId=%d", requestId)));

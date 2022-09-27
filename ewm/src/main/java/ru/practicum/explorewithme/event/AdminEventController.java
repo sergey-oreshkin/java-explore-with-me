@@ -32,8 +32,8 @@ public class AdminEventController {
                                  @RequestParam(name = "categories", required = false) List<Long> categories,
                                  @RequestParam(name = "rangeStart", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime rangeStart,
                                  @RequestParam(name = "rangeEnd", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime rangeEnd,
-                                 @RequestParam(name = "from", required = false) Integer from,
-                                 @RequestParam(name = "size", required = false) Integer size) {
+                                 @RequestParam(name = "from", defaultValue = "0") Integer from,
+                                 @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return mapper.toDto(eventService.getAll(users, states, categories, rangeStart, rangeEnd, from, size));
     }
 

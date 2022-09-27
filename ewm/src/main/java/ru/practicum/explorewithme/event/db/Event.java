@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import ru.practicum.explorewithme.category.db.Category;
+import ru.practicum.explorewithme.compilation.db.Compilation;
 import ru.practicum.explorewithme.event.dto.EventState;
 import ru.practicum.explorewithme.request.db.Request;
 import ru.practicum.explorewithme.users.db.User;
@@ -70,6 +71,9 @@ public class Event {
             fetch = FetchType.LAZY)
     @JsonIgnore
     Set<Request> requests = new HashSet<>();
+
+    @ManyToMany(mappedBy = "events")
+    Set<Compilation> compilations = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

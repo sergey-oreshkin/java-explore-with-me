@@ -3,8 +3,10 @@ package ru.practicum.explorewithme.event.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.common.OffsetLimitPageable;
+import ru.practicum.explorewithme.common.SortType;
 import ru.practicum.explorewithme.event.db.Event;
 import ru.practicum.explorewithme.event.db.EventRepository;
 import ru.practicum.explorewithme.event.dto.EventState;
@@ -160,6 +162,18 @@ public class EventServiceImpl implements EventService {
         }
         requestRepository.delete(request);
         return request;
+    }
+
+    @Override
+    public Event getPublishedById(Long eventId) {
+        return eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
+                .orElseThrow(() -> new NotFoundException("Event not found or not published yet", String.format("id=%d", eventId)));
+    }
+
+    @Override
+    public List<Event> getAll(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable, SortType sortType,
+                              LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+        return null;
     }
 
     private Event getEventOrThrow(Long eventId) {
