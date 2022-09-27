@@ -1,26 +1,28 @@
 package ru.practicum.explorewithme.users.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Value
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Jacksonized
 public class UserDto {
 
-    Long id;
+    private Long id;
 
     @NotBlank
     @Email
     @Size(max = 255)
-    String email;
+    private String email;
 
     @NotBlank
     @Size(max = 255)
-    String name;
+    private String name;
 }

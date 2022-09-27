@@ -1,17 +1,19 @@
 package ru.practicum.explorewithme.compilation.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 import ru.practicum.explorewithme.event.dto.EventDto;
 
 import java.util.List;
 
-@Value
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CompilationDto {
 
-    Long id;
-    String title;
-    Boolean pinned;
-    List<EventDto> events;
+    private Long id;
+    private String title;
+    private Boolean pinned;
+    private List<EventDto> events;
 }

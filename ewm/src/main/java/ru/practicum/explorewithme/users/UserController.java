@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.users.db.User;
 import ru.practicum.explorewithme.users.dto.UserDto;
 import ru.practicum.explorewithme.users.service.UserMapper;
-import ru.practicum.explorewithme.users.service.UserServiceImpl;
+import ru.practicum.explorewithme.users.service.UserService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -18,7 +18,7 @@ import java.util.List;
 @Validated
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     private final UserMapper mapper;
 

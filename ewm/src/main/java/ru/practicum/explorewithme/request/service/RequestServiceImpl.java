@@ -3,6 +3,7 @@ package ru.practicum.explorewithme.request.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.event.dto.EventState;
+import ru.practicum.explorewithme.event.service.EventService;
 import ru.practicum.explorewithme.exception.ConflictException;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
@@ -19,6 +20,8 @@ public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
 
+    private final EventService eventService;
+
     @Override
     public Request create(Request request) {
         requestRepository.findByRequesterIdAndEventId(request.getRequester().getId(), request.getEvent().getId())
@@ -32,14 +35,13 @@ public class RequestServiceImpl implements RequestService {
         if (request.getEvent().getState() != EventState.PUBLISHED) {
             throw new ConflictException("Event is not published yet", String.format("Event state is %s", request.getEvent().getState().toString()));
         }
-        long confirmedRequestsCount = request.getEvent().getRequests().stream().filter(r -> r.getState() == RequestState.CONFIRMED).count();
-        if (confirmedRequestsCount >= request.getEvent().getParticipantLimit()) {
+        if (eventService.isRequestLimit(request.getEvent())) {
             throw new ConflictException("Request limit has been reached", String.format("Request limit=%d", request.getEvent().getParticipantLimit()));
         }
-        if (request.getEvent().getRequestModeration()) {
-            request.setState(RequestState.PENDING);
-        } else {
+        if (request.getEvent().getParticipantLimit() == null || !request.getEvent().getRequestModeration() || request.getEvent().getParticipantLimit() == 0) {
             request.setState(RequestState.CONFIRMED);
+        } else {
+            request.setState(RequestState.PENDING);
         }
         return requestRepository.save(request);
     }

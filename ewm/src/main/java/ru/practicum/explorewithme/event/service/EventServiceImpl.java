@@ -3,7 +3,6 @@ package ru.practicum.explorewithme.event.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.common.OffsetLimitPageable;
 import ru.practicum.explorewithme.common.SortType;
@@ -24,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -96,15 +96,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event approve(Long eventId, String stateString) {
-        if ("reject".equals(stateString) || "publish".equals(stateString)) {
-            EventState state = EventState.valueOf((stateString + "ed").toUpperCase());
-            Event event = getEventOrThrow(eventId);
-            event.setState(state);
-            event.setPublished(LocalDateTime.now());
-            return eventRepository.save(event);
-        }
-        throw new ValidationException("State must be reject or publish", stateString);
+    public Event setEventState(Long eventId, EventState state) {
+        Event event = getEventOrThrow(eventId);
+        event.setState(state);
+        event.setPublished(LocalDateTime.now());
+        return eventRepository.save(event);
     }
 
     @Override
@@ -125,8 +121,7 @@ public class EventServiceImpl implements EventService {
         if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ValidationException("Only initiator can confirm the request", String.format("initiatorId=%d", userId));
         }
-        long confirmedRequestsCount = event.getRequests().stream().filter(r -> r.getState() == RequestState.CONFIRMED).count();
-        if (confirmedRequestsCount >= event.getParticipantLimit()) {
+        if (isRequestLimit(event)) {
             throw new ConflictException("Request limit has been reached", String.format("Request limit=%d", event.getParticipantLimit()));
         }
         Request request = requestRepository.findById(reqId)
@@ -139,7 +134,7 @@ public class EventServiceImpl implements EventService {
 
         List<Request> requests = requestRepository.findAllByEventId(eventId);
 
-        confirmedRequestsCount = requests.stream().filter(r -> r.getState() == RequestState.CONFIRMED).count();
+        long confirmedRequestsCount = requests.stream().filter(r -> r.getState() == RequestState.CONFIRMED).count();
         if (confirmedRequestsCount >= event.getParticipantLimit()) {
             requests.stream().filter(r -> r.getState() != RequestState.CONFIRMED).forEach(requestRepository::delete);
         }
@@ -161,6 +156,7 @@ public class EventServiceImpl implements EventService {
             throw new ValidationException("Wrong event for the request", String.format("EventId=%d, RequestId=%d", eventId, reqId));
         }
         requestRepository.delete(request);
+        request.setState(RequestState.REJECTED);
         return request;
     }
 
@@ -173,7 +169,21 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getAll(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable, SortType sortType,
                               LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
-        return null;
+        List<Event> events = getAll(null, List.of(EventState.PUBLISHED), categories, rangeStart, rangeEnd, from, size);
+        return events.stream()
+                .filter(e -> !(onlyAvailable && !isRequestLimit(e)))
+                .filter(e -> !(text != null && e.getAnnotation().toLowerCase().contains(text.toLowerCase())
+                        && e.getDescription().toLowerCase().contains(text.toLowerCase())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isRequestLimit(Event event) {
+        if (event.getParticipantLimit() == null || event.getParticipantLimit() == 0) {
+            return false;
+        }
+        long confirmedRequestsCount = event.getRequests().stream().filter(r -> r.getState() == RequestState.CONFIRMED).count();
+        return confirmedRequestsCount >= event.getParticipantLimit();
     }
 
     private Event getEventOrThrow(Long eventId) {

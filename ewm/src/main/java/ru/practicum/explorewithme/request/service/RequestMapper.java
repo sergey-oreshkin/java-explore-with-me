@@ -21,6 +21,7 @@ public interface RequestMapper {
 
     @Mapping(target = "requester", source = "requester.id")
     @Mapping(target = "event", source = "event.id")
+    @Mapping(target = "status", source = "state")
     RequestDto toDto(Request request);
 
     List<RequestDto> toDto(List<Request> requests);

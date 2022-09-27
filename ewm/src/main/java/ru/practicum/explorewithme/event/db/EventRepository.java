@@ -28,5 +28,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                     @Param("categories") List<Long> categories, @Param("rangeStart") LocalDateTime rangeStart,
                                     @Param("rangeEnd") LocalDateTime rangeEnd, Pageable pageable);
 
-    Optional<Event> findByIdAndState (Long id, EventState state);
+    Optional<Event> findByIdAndState(Long id, EventState state);
 }

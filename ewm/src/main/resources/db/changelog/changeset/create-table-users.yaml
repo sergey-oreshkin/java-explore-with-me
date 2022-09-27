@@ -17,7 +17,6 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
-                    unique: true
               - column:
                   name: email
                   type: varchar(255)

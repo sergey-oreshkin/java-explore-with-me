@@ -22,7 +22,7 @@ public interface EventService {
     List<Event> getAll(List<Long> users, List<EventState> states, List<Long> categories,
                        LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
-    Event approve(Long eventId, String stateString);
+    Event setEventState(Long eventId, EventState state);
 
     List<Request> getRequests(Long userId, Long eventId);
 
@@ -34,4 +34,6 @@ public interface EventService {
 
     List<Event> getAll(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable, SortType sortType,
                        LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
+
+    boolean isRequestLimit(Event event);
 }

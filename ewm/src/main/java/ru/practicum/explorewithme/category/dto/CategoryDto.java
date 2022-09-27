@@ -1,20 +1,20 @@
 package ru.practicum.explorewithme.category.dto;
 
-import lombok.Builder;
-import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Value
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Jacksonized
 public class CategoryDto {
 
-    Long id;
+    private Long id;
 
     @NotBlank
     @Size(max = 255)
-    String name;
+    private String name;
 }

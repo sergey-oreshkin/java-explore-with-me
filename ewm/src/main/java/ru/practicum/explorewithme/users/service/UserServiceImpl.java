@@ -15,10 +15,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    @Override
     public List<User> get(Integer from, Integer size, List<Long> idx) {
         Pageable pageable = OffsetLimitPageable.of(from, size);
         if (idx == null) {
@@ -27,15 +28,16 @@ public class UserServiceImpl {
         return userRepository.findAllByIdIn(idx, pageable);
     }
 
+    @Override
     public User create(User user) {
         try {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
-            throw new ConflictException("Email or name already in use",
-                    String.format("email=%s, name=%s", user.getEmail(), user.getName()));
+            throw new ConflictException("Email already in use", String.format("Email=%s", user.getEmail()));
         }
     }
 
+    @Override
     public void delete(Long id) {
         try {
             userRepository.deleteById(id);

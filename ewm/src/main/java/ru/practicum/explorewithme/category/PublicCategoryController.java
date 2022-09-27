@@ -23,12 +23,12 @@ public class PublicCategoryController {
 
     @GetMapping
     public List<CategoryDto> getAll(@RequestParam(name = "from", defaultValue = "0") Integer from,
-                                    @RequestParam(name = "size", defaultValue = "10") Integer size){
+                                    @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return mapper.toDto(categoryService.getAll(from, size));
     }
 
     @GetMapping("{catId}")
-    public CategoryDto get(@PathVariable @NotNull Long catId){
+    public CategoryDto get(@PathVariable @NotNull Long catId) {
         return mapper.toDto(categoryService.getById(catId));
     }
 

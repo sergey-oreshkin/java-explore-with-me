@@ -34,7 +34,7 @@ public class UserEventController {
     }
 
     @PatchMapping
-    public EventDto update(@Valid @RequestBody NewEventDto eventDto, @PathVariable @NotNull Long userId) {
+    public EventDto update(@RequestBody NewEventDto eventDto, @PathVariable @NotNull Long userId) {
         Event event = eventMapper.toEntity(eventDto, userId);
         return eventMapper.toDto(eventService.update(event));
     }
