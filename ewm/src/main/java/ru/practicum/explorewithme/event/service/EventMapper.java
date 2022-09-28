@@ -29,6 +29,7 @@ public interface EventMapper {
     @Mapping(target = "createdOn", source = "event.created")
     @Mapping(target = "location.lat", source = "event.latitude")
     @Mapping(target = "location.lon", source = "event.longitude")
+    @Mapping(target = "views", source = "id")
     EventDto toDto(Event event);
 
     List<EventDto> toDto(List<Event> events);

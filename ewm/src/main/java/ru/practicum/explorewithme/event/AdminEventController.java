@@ -33,7 +33,7 @@ public class AdminEventController {
                                  @RequestParam(name = "rangeEnd", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
                                  @RequestParam(name = "from", defaultValue = "0") Integer from,
                                  @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        return mapper.toDto(eventService.getAll(users, states, categories, rangeStart, rangeEnd, from, size));
+        return mapper.toDto(eventService.getAllPublished(users, states, categories, rangeStart, rangeEnd, from, size));
     }
 
     @PutMapping("{eventId}")

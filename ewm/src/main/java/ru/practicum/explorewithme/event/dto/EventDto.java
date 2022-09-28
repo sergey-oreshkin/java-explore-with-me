@@ -26,6 +26,7 @@ public class EventDto {
     private Boolean requestModeration;
     private EventState state;
     private Location location;
+    private long views;
 }
 
 
