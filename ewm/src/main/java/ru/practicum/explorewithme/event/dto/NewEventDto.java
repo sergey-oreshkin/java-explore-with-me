@@ -1,7 +1,6 @@
 package ru.practicum.explorewithme.event.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.Min;
@@ -10,38 +9,39 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Value
-@Builder
-@Jacksonized
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class NewEventDto {
 
-    Long eventId;
+    private Long eventId;
 
     @NotBlank
     @Size(max = 1024)
-    String title;
+    private String title;
 
     @NotBlank
-    String description;
+    private String description;
 
     @NotBlank
-    String annotation;
+    private String annotation;
 
     @NotNull
-    Integer category;
+    private Integer category;
 
     @NotNull
-    LocalDateTime eventDate;
+    private LocalDateTime eventDate;
 
     @NotNull
-    Boolean paid;
+    private Boolean paid;
 
     @NotNull
     @Min(value = 0L)
-    Integer participantLimit;
+    private Integer participantLimit;
 
     @NotNull
-    Boolean requestModeration;
+    private Boolean requestModeration;
 
-    Location location;
+    private Location location;
 }
