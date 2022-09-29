@@ -1,7 +1,9 @@
 package ru.practicum.explorewithme.event.dto;
 
-import lombok.*;
-import lombok.extern.jackson.Jacksonized;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;

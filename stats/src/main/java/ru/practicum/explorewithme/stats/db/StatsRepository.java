@@ -8,5 +8,5 @@ import java.util.List;
 public interface StatsRepository {
     Stats save(Stats stats);
 
-    List<HitsDto> getHits(List<String> uris, Boolean unique, LocalDateTime start, LocalDateTime end);
+    List<HitsDto> getHits(List<String> uris, Boolean unique, LocalDateTime start, LocalDateTime end, String appName);
 }

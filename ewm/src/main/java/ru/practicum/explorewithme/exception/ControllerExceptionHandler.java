@@ -43,7 +43,7 @@ public class ControllerExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .build();
         log.error(errorDto.toString());
-return errorDto;
+        return errorDto;
     }
 
     @ExceptionHandler(ConflictException.class)
@@ -119,7 +119,7 @@ return errorDto;
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDto handleUnknownException(Exception ex) {
-        ErrorDto errorDto =  ErrorDto.builder()
+        ErrorDto errorDto = ErrorDto.builder()
                 .errors(Collections.emptyList())
                 .message(ex.getMessage())
                 .reason("")

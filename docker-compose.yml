@@ -2,8 +2,6 @@ version: '3.1'
 services:
   stats-server:
     build: ./stats
-    environment:
-      - SERVER_PORT=9090
     ports:
       - "9090:9090"
 
@@ -14,7 +12,6 @@ services:
     build: ./ewm
     environment:
       - STATS-SERVER_URL=http://stats-server:9090
-      - SERVER_PORT=8080
     ports:
       - "8080:8080"
 

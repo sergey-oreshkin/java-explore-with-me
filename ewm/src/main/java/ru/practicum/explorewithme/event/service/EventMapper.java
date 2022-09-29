@@ -5,13 +5,14 @@ import ru.practicum.explorewithme.category.factory.CategoryFactory;
 import ru.practicum.explorewithme.event.db.Event;
 import ru.practicum.explorewithme.event.dto.EventDto;
 import ru.practicum.explorewithme.event.dto.NewEventDto;
+import ru.practicum.explorewithme.event.factory.EventFactory;
 import ru.practicum.explorewithme.users.factory.UserFactory;
 
 import java.util.List;
 
 @Mapper(
         componentModel = "spring",
-        uses = {UserFactory.class, CategoryFactory.class}
+        uses = {UserFactory.class, CategoryFactory.class, EventFactory.class}
 )
 public interface EventMapper {
     @Mapping(target = "initiator", source = "userId")

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.stats.db.Stats;
 import ru.practicum.explorewithme.stats.db.StatsRepository;
-import ru.practicum.explorewithme.stats.db.StatsRepositoryImpl;
 import ru.practicum.explorewithme.stats.dto.HitsDto;
 
 import java.time.LocalDateTime;
@@ -20,7 +19,7 @@ public class StatsServiceImpl {
         return statsRepository.save(stats);
     }
 
-    public List<HitsDto> get(List<String> uris, Boolean unique, LocalDateTime start, LocalDateTime end) {
-        return statsRepository.getHits(uris, unique,start, end);
+    public List<HitsDto> get(List<String> uris, Boolean unique, LocalDateTime start, LocalDateTime end, String appName) {
+        return statsRepository.getHits(uris, unique, start, end, appName);
     }
 }

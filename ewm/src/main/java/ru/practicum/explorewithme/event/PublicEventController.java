@@ -31,9 +31,9 @@ public class PublicEventController {
 
     @GetMapping("{eventId}")
     public EventDto get(@PathVariable @NotNull Long eventId, HttpServletRequest request) {
-        try{
+        try {
             client.hit(request);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error(ex.getMessage());
         }
         return eventMapper.toDto(eventService.getPublishedById(eventId));
@@ -50,9 +50,9 @@ public class PublicEventController {
                                  @RequestParam(name = "from", defaultValue = "0") Integer from,
                                  @RequestParam(name = "size", defaultValue = "10") Integer size,
                                  HttpServletRequest request) {
-        try{
+        try {
             client.hit(request);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error(ex.getMessage());
         }
         return eventMapper.toDto(eventService.getAllPublished(text, categories, paid, onlyAvailable, sortType, rangeStart, rangeEnd, from, size));

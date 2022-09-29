@@ -28,6 +28,7 @@ public class Config {
         return Jackson2ObjectMapperBuilder.json()
                 .modules(module)
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .featuresToEnable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS)
                 .build();
     }
 }
