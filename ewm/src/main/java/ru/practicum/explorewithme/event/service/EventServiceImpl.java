@@ -66,7 +66,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAll(Long userId, Integer from, Integer size) {
+    public List<Event> getAllPublished(Long userId, Integer from, Integer size) {
         Pageable pageable = OffsetLimitPageable.of(from, size);
         return eventRepository.findAllByInitiatorId(userId, pageable);
     }
@@ -89,8 +89,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAll(List<Long> users, List<EventState> states, List<Long> categories,
-                              LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+    public List<Event> getAllPublished(List<Long> users, List<EventState> states, List<Long> categories,
+                                       LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         Pageable pageable = OffsetLimitPageable.of(from, size);
         return eventRepository.findAllByParameters(users, states, categories, rangeStart, rangeEnd, pageable);
     }
@@ -167,9 +167,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAll(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable, SortType sortType,
-                              LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
-        List<Event> events = getAll(null, List.of(EventState.PUBLISHED), categories, rangeStart, rangeEnd, from, size);
+    public List<Event> getAllPublished(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable, SortType sortType,
+                                       LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+        List<Event> events = getAllPublished(null, List.of(EventState.PUBLISHED), categories, rangeStart, rangeEnd, from, size);
         return events.stream()
                 .filter(e -> !(onlyAvailable && !isRequestLimit(e)))
                 .filter(e -> !(text != null && e.getAnnotation().toLowerCase().contains(text.toLowerCase())

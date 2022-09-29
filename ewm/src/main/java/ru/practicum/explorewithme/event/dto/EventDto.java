@@ -1,30 +1,35 @@
 package ru.practicum.explorewithme.event.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.practicum.explorewithme.category.dto.CategoryDto;
 import ru.practicum.explorewithme.users.dto.ShortUserDto;
 
 import java.time.LocalDateTime;
 
-@Value
-@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventDto {
-    Long id;
-    String title;
-    String description;
-    String annotation;
-    CategoryDto category;
-    ShortUserDto initiator;
-    Integer confirmedRequests;
-    LocalDateTime createdOn;
-    LocalDateTime eventDate;
-    Boolean paid;
-    Integer participantLimit;
-    LocalDateTime publishedOn;
-    Boolean requestModeration;
-    EventState state;
-    Location location;
+    private Long id;
+    private String title;
+    private String description;
+    private String annotation;
+    private CategoryDto category;
+    private ShortUserDto initiator;
+    private Integer confirmedRequests;
+    private LocalDateTime createdOn;
+    private LocalDateTime eventDate;
+    private Boolean paid;
+    private Integer participantLimit;
+    private LocalDateTime publishedOn;
+    private Boolean requestModeration;
+    private EventState state;
+    private Location location;
+    private long views;
 }
 
 

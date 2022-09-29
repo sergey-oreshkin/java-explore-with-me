@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_stats
+      author: Sergey Oreshkin
+      changes:
+        - createTable:
+            tableName: stats
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: app
+                  type: varchar
+              - column:
+                  name: uri
+                  type: varchar
+              - column:
+                  name: ip
+                  type: varchar
+              - column:
+                  name: created
+                  type: timestamp

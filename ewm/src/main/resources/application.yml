@@ -1,3 +1,5 @@
+server:
+  port: 8080
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -9,3 +11,9 @@ spring:
 
 app:
   minTimeToEventMinutes: 120
+  name: ewm
+
+stats-server:
+  url: http://localhost:9090
+  getPath: /stats
+  postPath: /hit

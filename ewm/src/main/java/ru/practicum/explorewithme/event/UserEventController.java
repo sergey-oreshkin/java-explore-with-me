@@ -43,7 +43,7 @@ public class UserEventController {
     public List<EventDto> getAll(@PathVariable @NotNull Long userId,
                                  @RequestParam(name = "from", required = false) Integer from,
                                  @RequestParam(name = "size", required = false) Integer size) {
-        return eventMapper.toDto(eventService.getAll(userId, from, size));
+        return eventMapper.toDto(eventService.getAllPublished(userId, from, size));
     }
 
     @GetMapping("{eventId}")

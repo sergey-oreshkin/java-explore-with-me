@@ -13,14 +13,14 @@ public interface EventService {
 
     Event update(Event event);
 
-    List<Event> getAll(Long userId, Integer from, Integer size);
+    List<Event> getAllPublished(Long userId, Integer from, Integer size);
 
     Event get(Long userId, Long eventId);
 
     Event cancel(Long userId, Long eventId);
 
-    List<Event> getAll(List<Long> users, List<EventState> states, List<Long> categories,
-                       LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
+    List<Event> getAllPublished(List<Long> users, List<EventState> states, List<Long> categories,
+                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
     Event setEventState(Long eventId, EventState state);
 
@@ -32,8 +32,8 @@ public interface EventService {
 
     Event getPublishedById(Long eventId);
 
-    List<Event> getAll(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable, SortType sortType,
-                       LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
+    List<Event> getAllPublished(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable, SortType sortType,
+                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
     boolean isRequestLimit(Event event);
 }
