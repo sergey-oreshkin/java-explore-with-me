@@ -29,9 +29,9 @@ public class StatsController {
     @GetMapping("/stats")
     public List<HitsDto> get(@RequestParam(name = "uris", required = false) List<String> uris,
                              @RequestParam(name = "unique", defaultValue = "false") Boolean unique,
-                             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-                             @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-                             @RequestParam(name = "app", defaultValue = "ewm") String appName) {
+                             @RequestParam(name = "start") LocalDateTime start,
+                             @RequestParam(name = "end") LocalDateTime end,
+                             @RequestParam(name = "app", defaultValue = "ewm-main-service") String appName) {
         return statsService.get(uris, unique, start, end, appName);
     }
 }

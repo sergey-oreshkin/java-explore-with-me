@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface UserService {
     List<User> get(Integer from, Integer size, List<Long> idx);
-
     User create(User user);
-
     void delete(Long id);
 }

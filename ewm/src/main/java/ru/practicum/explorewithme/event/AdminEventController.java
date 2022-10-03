@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,8 @@ public class AdminEventController {
     public List<EventDto> getAll(@RequestParam(name = "users", required = false) List<Long> users,
                                  @RequestParam(name = "states", required = false) List<EventState> states,
                                  @RequestParam(name = "categories", required = false) List<Long> categories,
-                                 @RequestParam(name = "rangeStart", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-                                 @RequestParam(name = "rangeEnd", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+                                 @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
+                                 @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
                                  @RequestParam(name = "from", defaultValue = "0") Integer from,
                                  @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return mapper.toDto(eventService.getAllPublished(users, states, categories, rangeStart, rangeEnd, from, size));

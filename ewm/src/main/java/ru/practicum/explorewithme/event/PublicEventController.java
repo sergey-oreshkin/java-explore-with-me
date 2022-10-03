@@ -45,8 +45,8 @@ public class PublicEventController {
                                  @RequestParam(name = "paid", required = false) Boolean paid,
                                  @RequestParam(name = "onlyAvailable", required = false) Boolean onlyAvailable,
                                  @RequestParam(name = "sort", required = false) SortType sortType,
-                                 @RequestParam(name = "rangeStart", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-                                 @RequestParam(name = "rangeEnd", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+                                 @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
+                                 @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
                                  @RequestParam(name = "from", defaultValue = "0") Integer from,
                                  @RequestParam(name = "size", defaultValue = "10") Integer size,
                                  HttpServletRequest request) {

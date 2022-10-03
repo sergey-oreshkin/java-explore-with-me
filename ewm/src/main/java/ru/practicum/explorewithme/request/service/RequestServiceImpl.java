@@ -59,6 +59,7 @@ public class RequestServiceImpl implements RequestService {
             throw new ValidationException("Only requester can cancel request", String.format("userId=%d", userId));
         }
         requestRepository.delete(request);
+        request.setState(RequestState.CANCELLED);
         return request;
     }
 }

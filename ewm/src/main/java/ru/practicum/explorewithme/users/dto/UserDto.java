@@ -11,8 +11,6 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Jacksonized
 public class UserDto {
 
     private Long id;

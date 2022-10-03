@@ -27,10 +27,7 @@ public class StatsClient {
 
     public static final long DEFAULT_DAYS_AGO = 365;
 
-    public static final String DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
-    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DEFAULT_DATETIME_FORMAT);
-
+    public final DateTimeFormatter formatter;
     private final String getPath;
     private final String postPath;
     private final String appName;
@@ -40,7 +37,7 @@ public class StatsClient {
 
     @Autowired
     public StatsClient(@Value("${stats-server.url}") String baseUrl, @Value("${stats-server.getPath}") String getPath,
-                       @Value("${stats-server.postPath}") String postPath, @Value("${app.name}") String appName,
+                       @Value("${stats-server.postPath}") String postPath, @Value("${app.name}") String appName, @Value("${app.format.date-time}") String dateTimeFormat,
                        RestTemplateBuilder builder, ObjectMapper objectMapper) {
         this.restTemplate = builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(baseUrl))
@@ -52,6 +49,7 @@ public class StatsClient {
         this.postPath = postPath;
         this.appName = appName;
         this.objectMapper = objectMapper;
+        this.formatter = DateTimeFormatter.ofPattern(dateTimeFormat);
     }
 
     public void hit(HttpServletRequest request) {
@@ -82,8 +80,7 @@ public class StatsClient {
         ResponseEntity<String> response = restTemplate.getForEntity(getUriWithParams(getPath, parameters), String.class);
         if (response.getStatusCode().is2xxSuccessful()) {
             String body = response.getBody();
-            return objectMapper.readValue(body, new TypeReference<List<HitsDto>>() {
-            });
+            return objectMapper.readValue(body, new TypeReference<List<HitsDto>>() {});
         }
         throw new RuntimeException(String.format("Stats server response code is %d, error: %s",
                 response.getStatusCode().value(), response.getBody()));

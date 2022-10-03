@@ -20,6 +20,8 @@ public class StatsServiceImpl {
     }
 
     public List<HitsDto> get(List<String> uris, Boolean unique, LocalDateTime start, LocalDateTime end, String appName) {
-        return statsRepository.getHits(uris, unique, start, end, appName);
+        List<HitsDto> hits = statsRepository.getHits(uris, unique, start, end, appName);
+        hits.forEach(h -> h.setApp(appName));
+        return hits;
     }
 }

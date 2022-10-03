@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class RequestDto {
     private Long id;
     private Long requester;

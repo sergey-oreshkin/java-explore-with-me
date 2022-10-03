@@ -37,8 +37,8 @@ public class EventServiceImpl implements EventService {
 
     private final RequestRepository requestRepository;
 
-    @Value("${app.minTimeToEventMinutes}")
-    private int minTimeToEventMinutes;
+    @Value("${app.minMinutesToEvent}")
+    private int minMinutesToEvent;
 
     @Override
     public Event create(Event event) {
@@ -171,7 +171,7 @@ public class EventServiceImpl implements EventService {
                                        LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         List<Event> events = getAllPublished(null, List.of(EventState.PUBLISHED), categories, rangeStart, rangeEnd, from, size);
         return events.stream()
-                .filter(e -> !(onlyAvailable && !isRequestLimit(e)))
+                .filter(e -> !(onlyAvailable != null && onlyAvailable && !isRequestLimit(e)))
                 .filter(e -> !(text != null && e.getAnnotation().toLowerCase().contains(text.toLowerCase())
                         && e.getDescription().toLowerCase().contains(text.toLowerCase())))
                 .collect(Collectors.toList());
@@ -192,9 +192,9 @@ public class EventServiceImpl implements EventService {
     }
 
     private void validateEventDateOrThrow(LocalDateTime eventDate) {
-        LocalDateTime minTime = LocalDateTime.now().plusMinutes(minTimeToEventMinutes);
+        LocalDateTime minTime = LocalDateTime.now().plusMinutes(minMinutesToEvent);
         if (minTime.isAfter(eventDate)) {
-            throw new ValidationException(String.format("Must be minimum %d minutes before event start", minTimeToEventMinutes),
+            throw new ValidationException(String.format("Must be minimum %d minutes before event start", minMinutesToEvent),
                     eventDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         }
     }

@@ -19,8 +19,6 @@ public class StatsRepositoryImpl implements StatsRepository {
 
     public static final String TABLE_NAME = "stats";
 
-    public static final String DEFAULT_APP = "ewm";
-
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -58,7 +56,6 @@ public class StatsRepositoryImpl implements StatsRepository {
     private HitsDto mapRowToStatsOutputDto(ResultSet rs, int rowNum) throws SQLException {
         if (rs.getRow() == 0) return null;
         return HitsDto.builder()
-                .app(DEFAULT_APP)
                 .uri(rs.getString("uri"))
                 .hits(rs.getLong("count"))
                 .build();
