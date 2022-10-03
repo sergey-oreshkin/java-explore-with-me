@@ -11,6 +11,8 @@ spring:
   mvc:
     format:
       date-time: yyyy-MM-dd HH:mm:ss
+  jpa:
+    show-sql: true
 
 app:
   minMinutesToEvent: 120
