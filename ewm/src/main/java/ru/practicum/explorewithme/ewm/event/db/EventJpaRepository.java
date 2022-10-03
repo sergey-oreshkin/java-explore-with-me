@@ -2,12 +2,9 @@ package ru.practicum.explorewithme.ewm.event.db;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import ru.practicum.explorewithme.ewm.event.dto.EventState;
 import ru.practicum.explorewithme.ewm.users.db.User;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

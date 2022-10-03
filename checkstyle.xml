@@ -10,6 +10,10 @@
 		<property name="max" value="120"/>
 		<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
 	</module>
+	<module name="SuppressionFilter">
+		<property name="file" value="suppressions.xml"/>
+		<property name="optional" value="false"/>
+	</module>
 	<module name="TreeWalker">
 		<module name="IllegalImport">
 			<property name="regexp" value="true"/>
