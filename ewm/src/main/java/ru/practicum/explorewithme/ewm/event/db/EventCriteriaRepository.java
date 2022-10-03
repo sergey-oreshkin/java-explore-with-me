@@ -22,8 +22,7 @@ public class EventCriteriaRepository implements CustomEventRepository {
 
     @Override
     public List<Event> findAllByParams(List<Long> users, List<EventState> states, List<Long> categories, Boolean paid,
-                                       LocalDateTime rangeStart, LocalDateTime rangeEnd, String text, Boolean onlyAvailable,
-                                       Integer from, Integer size) {
+                                       LocalDateTime rangeStart, LocalDateTime rangeEnd, String text, Integer from, Integer size) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Event> query = cb.createQuery(Event.class);
         Root<Event> event = query.from(Event.class);

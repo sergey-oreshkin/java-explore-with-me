@@ -43,6 +43,6 @@ public class EventRepositoryFacade {
     public List<Event> findAllByParameters(List<Long> users, List<EventState> states, List<Long> categories, Boolean paid,
                                            LocalDateTime rangeStart, LocalDateTime rangeEnd, String text, Boolean onlyAvailable,
                                            Integer from, Integer size) {
-        return customRepository.findAllByParams(users, states, categories, paid, rangeStart, rangeEnd, text, onlyAvailable, from, size);
+        return customRepository.findAllByParams(users, states, categories, paid, rangeStart, rangeEnd, text, from, size);
     }
 }
