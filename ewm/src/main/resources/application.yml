@@ -8,10 +8,19 @@ spring:
     password: test
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+  mvc:
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss
+  jpa:
+    show-sql: true
 
 app:
-  minTimeToEventMinutes: 120
-  name: ewm
+  minMinutesToEvent: 120
+  name: ewm-main-service
+  format:
+    date-time: yyyy-MM-dd HH:mm:ss
+  base-url:
+    event: /events
 
 stats-server:
   url: http://localhost:9090

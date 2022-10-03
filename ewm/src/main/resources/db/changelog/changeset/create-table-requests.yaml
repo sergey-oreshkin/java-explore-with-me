@@ -32,3 +32,6 @@ databaseChangeLog:
               - column:
                   name: created
                   type: timestamp
+        - addUniqueConstraint:
+            tableName: requests
+            columnNames: requester_id, event_id
