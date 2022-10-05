@@ -1,11 +1,4 @@
 ## Server for ExploreWithMe project.
 
-### Порядок разработки фич
-  - схема БД
-  - admin / users
-  - admin / category
-  - admin / events
-  - users / events
-  - users / requests
-  - admin / compilation
-  - public
+### Дипломный проект Yandex Practicum
+  [Ссылка на пулл реквест](https://github.com/sergey-oreshkin/java-explore-with-me/pull/9) для ревью
