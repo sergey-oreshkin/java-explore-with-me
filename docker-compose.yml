@@ -33,7 +33,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
       - SPRING_DATASOURCE_USER=root
       - SPRING_DATASOURCE_PASSWORD=root
-      - SPRING_JPA_SHOW_SQL=false
 
   ewm-db:
     image: postgres:14-alpine

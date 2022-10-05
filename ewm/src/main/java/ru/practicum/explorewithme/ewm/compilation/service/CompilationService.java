@@ -5,6 +5,7 @@ import ru.practicum.explorewithme.ewm.compilation.db.Compilation;
 import java.util.List;
 
 public interface CompilationService {
+
     Compilation create(Compilation compilation);
 
     void delete(Long compId);

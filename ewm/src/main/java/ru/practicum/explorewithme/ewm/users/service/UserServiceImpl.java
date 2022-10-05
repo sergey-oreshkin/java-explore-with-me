@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.ewm.common.OffsetLimitPageable;
 import ru.practicum.explorewithme.ewm.exception.ConflictException;
 import ru.practicum.explorewithme.ewm.exception.NotFoundException;
@@ -12,6 +13,8 @@ import ru.practicum.explorewithme.ewm.users.db.User;
 import ru.practicum.explorewithme.ewm.users.db.UserRepository;
 
 import java.util.List;
+
+import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +32,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User create(User user) {
         try {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
-            throw new ConflictException("Email already in use", String.format("Email=%s", user.getEmail()));
+            throw new ConflictException("Email already in use", format("Email=%s", user.getEmail()));
         }
     }
 
@@ -42,7 +46,7 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new NotFoundException("User not found", String.format("Id=%d", id));
+            throw new NotFoundException("User not found", format("Id=%d", id));
         }
     }
 }

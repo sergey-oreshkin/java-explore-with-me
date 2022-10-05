@@ -13,6 +13,4 @@ public interface StatsMapper {
 
     @Mapping(target = "timestamp", source = "created")
     StatsDto toDto(Stats stats);
-
-//    List<StatsOutputDto> toOutput(List<Stats> stats);
 }

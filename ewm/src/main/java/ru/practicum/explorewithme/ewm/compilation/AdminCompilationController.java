@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @RequestMapping("/admin/compilations")
 @RequiredArgsConstructor
 @Validated
-public class CompilationController {
+public class AdminCompilationController {
 
     private final CompilationMapper mapper;
 

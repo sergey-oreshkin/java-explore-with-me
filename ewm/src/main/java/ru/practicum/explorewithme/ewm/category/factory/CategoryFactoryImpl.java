@@ -15,6 +15,6 @@ public class CategoryFactoryImpl implements CategoryFactory {
     @Override
     public Category getById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Category not found", String.format("id=%d", id)));
+                .orElseThrow(() -> new NotFoundException("Category not found", String.format("Id=%d", id)));
     }
 }

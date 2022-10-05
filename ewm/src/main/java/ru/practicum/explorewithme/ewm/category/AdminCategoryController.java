@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @RequestMapping("/admin/categories")
 @RequiredArgsConstructor
 @Validated
-public class CategoryController {
+public class AdminCategoryController {
 
     private final CategoryService categoryService;
 

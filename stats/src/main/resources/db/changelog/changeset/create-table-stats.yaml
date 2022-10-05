@@ -24,3 +24,4 @@ databaseChangeLog:
               - column:
                   name: created
                   type: timestamp
+                  defaultValueComputed: current_timestamp

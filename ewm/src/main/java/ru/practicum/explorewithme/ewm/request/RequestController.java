@@ -27,7 +27,7 @@ public class RequestController {
 
     @GetMapping
     public List<RequestDto> getAll(@PathVariable @NotNull Long userId) {
-        return mapper.toDto(requestService.getAll(userId));
+        return mapper.toDto(requestService.getAllByRequester(userId));
     }
 
     @PatchMapping("{requestId}/cancel")

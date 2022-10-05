@@ -7,7 +7,7 @@ import java.util.List;
 public interface RequestService {
     Request create(Request request);
 
-    List<Request> getAll(Long userId);
+    List<Request> getAllByRequester(Long userId);
 
     Request cancel(Long userId, Long requestId);
 }

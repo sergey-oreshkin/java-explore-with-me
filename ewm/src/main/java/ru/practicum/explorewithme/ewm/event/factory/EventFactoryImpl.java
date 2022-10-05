@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.explorewithme.ewm.event.db.Event;
 import ru.practicum.explorewithme.ewm.event.db.EventJpaRepository;
 import ru.practicum.explorewithme.ewm.exception.NotFoundException;
-import ru.practicum.explorewithme.ewm.stats.StatsClient;
+import ru.practicum.explorewithme.ewm.stats.HttpClient;
 
 @Component
 @Slf4j
@@ -15,7 +15,7 @@ public class EventFactoryImpl implements EventFactory {
 
     private final EventJpaRepository eventRepository;
 
-    private final StatsClient client;
+    private final HttpClient client;
 
     @Override
     public Event getById(Long id) {
