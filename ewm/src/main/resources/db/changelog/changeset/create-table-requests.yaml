@@ -29,9 +29,12 @@ databaseChangeLog:
               - column:
                   name: state
                   type: varchar(24)
+                  constraints:
+                    nullable: false
               - column:
                   name: created
                   type: timestamp
+                  defaultValueComputed: current_timestamp
         - addUniqueConstraint:
             tableName: requests
             columnNames: requester_id, event_id

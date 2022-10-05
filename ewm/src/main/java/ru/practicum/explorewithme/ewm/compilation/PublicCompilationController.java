@@ -23,7 +23,7 @@ public class PublicCompilationController {
     @GetMapping
     public List<CompilationDto> getAll(@RequestParam(name = "from", defaultValue = "0") Integer from,
                                        @RequestParam(name = "size", defaultValue = "10") Integer size,
-                                       @RequestParam(name = "pinned") Boolean pinned) {
+                                       @RequestParam(name = "pinned", required = false) Boolean pinned) {
         return mapper.toDto(compilationService.getAll(from, size, pinned));
     }
 

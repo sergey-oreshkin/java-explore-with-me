@@ -1,18 +1,12 @@
 server:
   port: 8080
+
 spring:
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:ewm
-    username: test
-    password: test
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   mvc:
     format:
       date-time: yyyy-MM-dd HH:mm:ss
-  jpa:
-    show-sql: true
 
 app:
   minMinutesToEvent: 120

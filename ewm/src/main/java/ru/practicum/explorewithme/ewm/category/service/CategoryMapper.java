@@ -8,6 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
+
     CategoryDto toDto(Category category);
 
     List<CategoryDto> toDto(List<Category> categories);

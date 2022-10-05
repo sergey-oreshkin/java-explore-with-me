@@ -12,6 +12,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import ru.practicum.explorewithme.ewm.exception.HttpClientException;
 import ru.practicum.explorewithme.ewm.stats.dto.HitsDto;
 import ru.practicum.explorewithme.ewm.stats.dto.StatsDto;
 
@@ -22,23 +23,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class StatsClient {
+import static java.lang.String.format;
 
-    public static final long DEFAULT_DAYS_AGO = 365;
+@Service
+public class StatsClient implements HttpClient {
+
+    public static final long DEFAULT_PERIOD_IN_DAYS = 365;
 
     public final DateTimeFormatter formatter;
     private final String getPath;
     private final String postPath;
-    private final String appName;
+    private final String defaultAppName;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
 
     @Autowired
-    public StatsClient(@Value("${stats-server.url}") String baseUrl, @Value("${stats-server.getPath}") String getPath,
-                       @Value("${stats-server.postPath}") String postPath, @Value("${app.name}") String appName, @Value("${app.format.date-time}") String dateTimeFormat,
-                       RestTemplateBuilder builder, ObjectMapper objectMapper) {
+    public StatsClient(@Value("${stats-server.url}") String baseUrl,
+                       @Value("${stats-server.getPath}") String getPath,
+                       @Value("${stats-server.postPath}") String postPath,
+                       @Value("${app.name}") String appName,
+                       @Value("${app.format.date-time}") String dateTimeFormat,
+                       RestTemplateBuilder builder,
+                       ObjectMapper objectMapper) {
         this.restTemplate = builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(baseUrl))
                 .requestFactory(HttpComponentsClientHttpRequestFactory.class)
@@ -47,43 +54,51 @@ public class StatsClient {
                 .build();
         this.getPath = getPath;
         this.postPath = postPath;
-        this.appName = appName;
+        this.defaultAppName = appName;
         this.objectMapper = objectMapper;
         this.formatter = DateTimeFormatter.ofPattern(dateTimeFormat);
     }
 
-    public void hit(HttpServletRequest request) {
-        HttpEntity<StatsDto> requestBody = new HttpEntity<>(StatsDto.builder()
-                .app(appName)
-                .uri(request.getRequestURI())
-                .ip(request.getRemoteAddr())
-                .timestamp(LocalDateTime.now()).build());
+    @Override
+    public void hit(HttpServletRequest request) throws HttpClientException {
+        HttpEntity<StatsDto> requestBody = new HttpEntity<>(
+                StatsDto.builder()
+                        .app(defaultAppName)
+                        .uri(request.getRequestURI())
+                        .ip(request.getRemoteAddr())
+                        .timestamp(LocalDateTime.now()).build()
+        );
+
         ResponseEntity<String> response = restTemplate.postForEntity(postPath, requestBody, String.class);
+
         if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new RuntimeException(String.format("Stats server response code is %d, error: %s",
+            throw new HttpClientException(format("Stats server response code is %d, error: %s",
                     response.getStatusCode().value(), response.getBody()));
         }
     }
 
-    public List<HitsDto> get(Map<String, String> parameters) throws JsonProcessingException {
+    @Override
+    public List<HitsDto> get(Map<String, String> parameters) throws JsonProcessingException, HttpClientException {
         if (parameters == null) {
             parameters = new HashMap<>();
         }
         if (parameters.get("start") == null) {
-            String startTime = LocalDateTime.now().minusDays(DEFAULT_DAYS_AGO).format(formatter);
+            String startTime = LocalDateTime.now().minusDays(DEFAULT_PERIOD_IN_DAYS).format(formatter);
             parameters.put("start", startTime);
         }
         if (parameters.get("end") == null) {
             String endTime = LocalDateTime.now().format(formatter);
             parameters.put("end", endTime);
         }
+
         ResponseEntity<String> response = restTemplate.getForEntity(getUriWithParams(getPath, parameters), String.class);
+
         if (response.getStatusCode().is2xxSuccessful()) {
             String body = response.getBody();
             return objectMapper.readValue(body, new TypeReference<List<HitsDto>>() {
             });
         }
-        throw new RuntimeException(String.format("Stats server response code is %d, error: %s",
+        throw new HttpClientException(format("Stats server response code is %d, error: %s",
                 response.getStatusCode().value(), response.getBody()));
     }
 

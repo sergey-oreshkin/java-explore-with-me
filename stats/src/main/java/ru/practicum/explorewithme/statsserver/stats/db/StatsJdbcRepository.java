@@ -13,9 +13,12 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.lang.String.format;
+import static java.lang.String.join;
+
 @Repository
 @RequiredArgsConstructor
-public class StatsRepositoryImpl implements StatsRepository {
+public class StatsJdbcRepository implements StatsRepository {
 
     public static final String TABLE_NAME = "stats";
 
@@ -40,8 +43,7 @@ public class StatsRepositoryImpl implements StatsRepository {
 
     @Override
     public List<HitsDto> getHits(List<String> uris, Boolean unique, LocalDateTime start, LocalDateTime end, String appName) {
-        String sql = String.format(
-                "SELECT uri, COUNT(%s) count FROM %s WHERE created>? AND created<? AND app=? %s GROUP BY uri",
+        String sql = format("SELECT uri, COUNT(%s) count FROM %s WHERE created>? AND created<? AND app=? %s GROUP BY uri",
                 unique ? "DISTINCT ip" : "*",
                 TABLE_NAME,
                 uris == null ? "" : "AND uri IN(?)"
@@ -50,7 +52,7 @@ public class StatsRepositoryImpl implements StatsRepository {
         if (uris == null) {
             return jdbcTemplate.query(sql, this::mapRowToStatsOutputDto, start, end, appName);
         }
-        return jdbcTemplate.query(sql, this::mapRowToStatsOutputDto, start, end, appName, String.join(", ", uris));
+        return jdbcTemplate.query(sql, this::mapRowToStatsOutputDto, start, end, appName, join(", ", uris));
     }
 
     private HitsDto mapRowToStatsOutputDto(ResultSet rs, int rowNum) throws SQLException {

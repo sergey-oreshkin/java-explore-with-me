@@ -1,8 +1,6 @@
 package ru.practicum.explorewithme.ewm.event.service;
 
-import ru.practicum.explorewithme.ewm.common.SortType;
 import ru.practicum.explorewithme.ewm.event.db.Event;
-import ru.practicum.explorewithme.ewm.event.dto.EventDto;
 import ru.practicum.explorewithme.ewm.event.dto.EventState;
 import ru.practicum.explorewithme.ewm.request.db.Request;
 
@@ -33,8 +31,8 @@ public interface EventService {
 
     Event getPublishedById(Long eventId);
 
-    List<EventDto> getAllPublished(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable, SortType sortType,
-                                   LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
+    List<Event> getAllPublished(String text, List<Long> categories, Boolean paid, Boolean onlyAvailable,
+                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
     boolean isRequestLimit(Event event);
 }

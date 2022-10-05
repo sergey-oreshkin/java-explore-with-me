@@ -8,7 +8,7 @@ import ru.practicum.explorewithme.ewm.common.SortType;
 import ru.practicum.explorewithme.ewm.event.dto.EventDto;
 import ru.practicum.explorewithme.ewm.event.service.EventMapper;
 import ru.practicum.explorewithme.ewm.event.service.EventService;
-import ru.practicum.explorewithme.ewm.stats.StatsClient;
+import ru.practicum.explorewithme.ewm.stats.HttpClient;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
@@ -26,7 +26,7 @@ public class PublicEventController {
 
     private final EventMapper eventMapper;
 
-    private final StatsClient client;
+    private final HttpClient client;
 
     @GetMapping("{eventId}")
     public EventDto get(@PathVariable @NotNull Long eventId, HttpServletRequest request) {
@@ -54,6 +54,9 @@ public class PublicEventController {
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
-        return eventService.getAllPublished(text, categories, paid, onlyAvailable, sortType, rangeStart, rangeEnd, from, size);
+        return eventMapper.toDto(
+                eventService.getAllPublished(text, categories, paid, onlyAvailable, rangeStart, rangeEnd, from, size),
+                sortType
+        );
     }
 }

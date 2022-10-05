@@ -2,6 +2,7 @@ package ru.practicum.explorewithme.ewm.request.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.ewm.event.dto.EventState;
 import ru.practicum.explorewithme.ewm.event.service.EventService;
 import ru.practicum.explorewithme.ewm.exception.ConflictException;
@@ -14,6 +15,8 @@ import ru.practicum.explorewithme.ewm.request.dto.RequestState;
 import java.util.List;
 import java.util.Objects;
 
+import static java.lang.String.format;
+
 @Service
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
@@ -23,22 +26,23 @@ public class RequestServiceImpl implements RequestService {
     private final EventService eventService;
 
     @Override
+    @Transactional
     public Request create(Request request) {
         requestRepository.findByRequesterIdAndEventId(request.getRequester().getId(), request.getEvent().getId())
                 .ifPresent(r -> {
                     throw new ConflictException("Request already exist",
-                            String.format("userId=%d, eventId=%d", r.getRequester().getId(), r.getEvent().getId()));
+                            format("UserId=%d, EventId=%d", r.getRequester().getId(), r.getEvent().getId()));
                 });
         if (Objects.equals(request.getRequester().getId(), request.getEvent().getInitiator().getId())) {
-            throw new ConflictException("Participation not available for initiator", String.format("InitiatorId=%d", request.getEvent().getInitiator().getId()));
+            throw new ConflictException("Participation not available for initiator", format("InitiatorId=%d", request.getEvent().getInitiator().getId()));
         }
         if (request.getEvent().getState() != EventState.PUBLISHED) {
-            throw new ConflictException("Event is not published yet", String.format("Event state is %s", request.getEvent().getState().toString()));
+            throw new ConflictException("Event is not published yet", format("Event state is %s", request.getEvent().getState().toString()));
         }
         if (eventService.isRequestLimit(request.getEvent())) {
-            throw new ConflictException("Request limit has been reached", String.format("Request limit=%d", request.getEvent().getParticipantLimit()));
+            throw new ConflictException("Request limit has been reached", format("Request limit=%d", request.getEvent().getParticipantLimit()));
         }
-        if (request.getEvent().getParticipantLimit() == null || !request.getEvent().getRequestModeration() || request.getEvent().getParticipantLimit() == 0) {
+        if (!request.getEvent().getRequestModeration()) {
             request.setState(RequestState.CONFIRMED);
         } else {
             request.setState(RequestState.PENDING);
@@ -47,16 +51,16 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<Request> getAll(Long userId) {
+    public List<Request> getAllByRequester(Long userId) {
         return requestRepository.findAllByRequesterId(userId);
     }
 
     @Override
     public Request cancel(Long userId, Long requestId) {
         Request request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new NotFoundException("Request not found", String.format("requestId=%d", requestId)));
+                .orElseThrow(() -> new NotFoundException("Request not found", format("RequestId=%d", requestId)));
         if (!Objects.equals(request.getRequester().getId(), userId)) {
-            throw new ValidationException("Only requester can cancel request", String.format("userId=%d", userId));
+            throw new ValidationException("Only requester can cancel request", format("UserId=%d", userId));
         }
         requestRepository.delete(request);
         request.setState(RequestState.CANCELED);
