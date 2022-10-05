@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.ewm.common.OffsetLimitPageable;
 import ru.practicum.explorewithme.ewm.event.db.Event;
 import ru.practicum.explorewithme.ewm.event.db.EventRepositoryFacade;
@@ -12,7 +13,6 @@ import ru.practicum.explorewithme.ewm.exception.ConflictException;
 import ru.practicum.explorewithme.ewm.exception.NotFoundException;
 import ru.practicum.explorewithme.ewm.exception.ValidationException;
 import ru.practicum.explorewithme.ewm.request.db.Request;
-import ru.practicum.explorewithme.ewm.request.db.RequestRepository;
 import ru.practicum.explorewithme.ewm.request.dto.RequestState;
 import ru.practicum.explorewithme.ewm.users.db.User;
 import ru.practicum.explorewithme.ewm.users.factory.UserFactory;
@@ -37,12 +37,12 @@ public class EventServiceImpl implements EventService {
 
     private final UserFactory userFactory;
 
-    private final RequestRepository requestRepository;
 
     @Value("${app.minMinutesToEvent}")
     private int minMinutesToEvent;
 
     @Override
+    @Transactional
     public Event create(Event event) {
         validateEventDateOrThrow(event.getEventDate());
         event.setState(EventState.PENDING);
@@ -50,6 +50,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public Event update(Event event) {
         if (event.getId() == null) {
             throw new ValidationException("Event id must not be null", valueOf(event.getId()));
@@ -81,6 +82,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public Event cancel(Long userId, Long eventId) {
         Event event = get(userId, eventId);
         if (event.getState() == EventState.PUBLISHED) {
@@ -98,6 +100,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public Event setEventState(Long eventId, EventState state) {
         Event event = getEventOrThrow(eventId);
         event.setState(state);
@@ -115,6 +118,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public Request confirm(Long userId, Long eventId, Long reqId) {
         Event event = getEventOrThrow(eventId);
         if (!event.getRequestModeration()) {
@@ -126,20 +130,13 @@ public class EventServiceImpl implements EventService {
         if (isRequestLimit(event)) {
             throw new ConflictException("Request limit has been reached", format("Request limit=%d", event.getParticipantLimit()));
         }
-        Request request = requestRepository.findById(reqId)
-                .orElseThrow(() -> new NotFoundException("Request not found", format("Id=%d", reqId)));
-        if (!event.getRequests().contains(request)) {
-            throw new ValidationException("Wrong event for the request", format("EventId=%d, RequestId=%d", eventId, reqId));
-        }
+        Request request = event.getRequests().stream().filter(r -> Objects.equals(r.getId(), reqId)).findFirst()
+                .orElseThrow(() -> new ValidationException("Wrong event for the request", format("EventId=%d, RequestId=%d", eventId, reqId)));
         request.setState(RequestState.CONFIRMED);
-        requestRepository.save(request);
-
-        List<Request> requests = requestRepository.findAllByEventId(eventId);
-
-        long confirmedRequestsCount = requests.stream().filter(r -> r.getState() == RequestState.CONFIRMED).count();
-        if (confirmedRequestsCount >= event.getParticipantLimit()) {
-            requests.stream().filter(r -> r.getState() != RequestState.CONFIRMED).forEach(requestRepository::delete);
+        if (isRequestLimit(event)) {
+            event.getRequests().removeIf(r -> r.getState() != RequestState.CONFIRMED);
         }
+        eventRepository.save(event);
         return request;
     }
 
@@ -152,12 +149,11 @@ public class EventServiceImpl implements EventService {
         if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ValidationException("Only initiator can confirm the request", format("InitiatorId=%d", userId));
         }
-        Request request = requestRepository.findById(reqId)
-                .orElseThrow(() -> new NotFoundException("Request not found", format("Id=%d", reqId)));
-        if (!event.getRequests().contains(request)) {
-            throw new ValidationException("Wrong event for the request", format("EventId=%d, RequestId=%d", eventId, reqId));
-        }
-        requestRepository.delete(request);
+        Request request = event.getRequests().stream().filter(r -> Objects.equals(r.getId(), reqId)).findFirst()
+                .orElseThrow(() -> new ValidationException("Wrong event for the request", format("EventId=%d, RequestId=%d", eventId, reqId)));
+
+        event.getRequests().remove(request);
+        eventRepository.save(event);
         request.setState(RequestState.REJECTED);
         return request;
     }
