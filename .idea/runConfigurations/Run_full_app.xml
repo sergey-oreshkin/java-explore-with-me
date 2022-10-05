@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run full app" type="CompoundRunConfigurationType">
+    <toRun name="EwmServer" type="SpringBootApplicationConfigurationType" />
+    <toRun name="StatsServer" type="SpringBootApplicationConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
