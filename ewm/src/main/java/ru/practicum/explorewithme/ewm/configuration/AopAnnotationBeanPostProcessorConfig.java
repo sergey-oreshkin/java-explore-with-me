@@ -8,7 +8,7 @@ import ru.practicum.explorewithme.ewm.aop.AopAnnotationBeanPostProcessor;
 public class AopAnnotationBeanPostProcessorConfig {
 
     @Bean
-    public AopAnnotationBeanPostProcessor aopAnnotationBeanPostProcessor(){
+    public AopAnnotationBeanPostProcessor aopAnnotationBeanPostProcessor() {
         return new AopAnnotationBeanPostProcessor();
     }
 }
