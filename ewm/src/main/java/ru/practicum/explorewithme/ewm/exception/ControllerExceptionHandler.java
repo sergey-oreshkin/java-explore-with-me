@@ -88,23 +88,9 @@ public class ControllerExceptionHandler {
         return errorDto;
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ExceptionHandler({HttpMessageNotReadableException.class, InvalidDataAccessApiUsageException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDto handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        ErrorDto errorDto = ErrorDto.builder()
-                .errors(Collections.emptyList())
-                .message(ex.getMessage())
-                .reason("")
-                .status(HttpStatus.BAD_REQUEST)
-                .timestamp(LocalDateTime.now())
-                .build();
-        log.error(errorDto.toString());
-        return errorDto;
-    }
-
-    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDto handleUnknownException(InvalidDataAccessApiUsageException ex) {
+    public ErrorDto handleHttpException(RuntimeException ex) {
         ErrorDto errorDto = ErrorDto.builder()
                 .errors(Collections.emptyList())
                 .message(ex.getMessage())
