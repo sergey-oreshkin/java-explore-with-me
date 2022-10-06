@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_events_compilation
+      author: Sergey Oreshkin
+      changes:
+        - createTable:
+            tableName: events_compilation
+            columns:
+              - column:
+                  name: event_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_event_compilation
+                    references: events(id)
+              - column:
+                  name: compilation_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_compilation_event
+                    references: compilations(id)
+        - addPrimaryKey:
+            tableName: events_compilation
+            columnNames: event_id, compilation_id

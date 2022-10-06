@@ -1,0 +1,9 @@
+server:
+  port: 9090
+
+spring:
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  mvc:
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss

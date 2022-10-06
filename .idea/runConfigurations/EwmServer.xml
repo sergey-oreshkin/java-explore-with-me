@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="EwmServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" activateToolWindowBeforeRun="false" nameIsGenerated="true">
+    <option name="ACTIVE_PROFILES" value="dev" />
+    <option name="INCLUDE_PROVIDED_SCOPE" value="false" />
+    <module name="ewm" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ru.practicum.explorewithme.ewm.EwmServer" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
