@@ -15,8 +15,7 @@ import ru.practicum.explorewithme.ewm.users.db.UserRepository;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,7 +32,7 @@ class UserServiceImplTest {
     User user = User.builder().id(DEFAULT_ID).build();
 
     @Test
-    void get_shouldInvokeUserRepositoryFindAll_whenIdxIsNull() {
+    void get_shouldInvokeUserRepositoryFindAllA_whenIdxIsNull() {
         when(userRepository.findAll(any(OffsetLimitPageable.class))).thenReturn(Page.empty());
 
         userService.get(0, 10, null);
@@ -42,7 +41,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void get_shouldInvokeUserRepositoryFindAllByIdIn_whenIdxIsNull() {
+    void get_shouldInvokeUserRepositoryFindAllByIdIn_whenIdxIsNotNull() {
         when(userRepository.findAllByIdIn(eq(Collections.emptyList()), any(OffsetLimitPageable.class))).thenReturn(List.of(user));
 
         userService.get(0, 10, Collections.emptyList());
@@ -58,6 +57,7 @@ class UserServiceImplTest {
 
         verify(userRepository, only()).save(user);
 
+        assertNotNull(result);
         assertEquals(user, result);
     }
 
@@ -71,6 +71,7 @@ class UserServiceImplTest {
     @Test
     void delete_shouldInvokeUserRepositoryDelete() {
         userService.delete(anyLong());
+
         verify(userRepository, only()).deleteById(anyLong());
     }
 }
