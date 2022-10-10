@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -62,8 +64,7 @@ class CategoryServiceImplTest {
     void getAll_shouldReturnListOfPage() {
         Integer from = 0;
         Integer size = 10;
-        Pageable pageable = OffsetLimitPageable.of(from, size);
-        when(categoryRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(category)));
+        when(categoryRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(category)));
 
         var result = categoryService.getAll(from,size);
 
