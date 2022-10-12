@@ -53,7 +53,7 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public Event update(Event event) {
         if (event.getId() == null) {
-            throw new ValidationException("Event id must not be null", valueOf(event.getId()));
+            throw new ValidationException("Event id must not be null", "EventId=null");
         }
         Event oldEvent = eventRepository.findById(event.getId())
                 .orElseThrow(() -> new NotFoundException("Event not found", format("Id=%d", event.getId())));
