@@ -6,3 +6,5 @@ spring:
     password: test
   jpa:
     show-sql: true
+stats-server:
+  url: http://localhost:9090

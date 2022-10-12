@@ -12,10 +12,13 @@ import ru.practicum.explorewithme.ewm.event.db.Event;
 import ru.practicum.explorewithme.ewm.event.dto.EventState;
 import ru.practicum.explorewithme.ewm.event.service.EventService;
 import ru.practicum.explorewithme.ewm.exception.ConflictException;
+import ru.practicum.explorewithme.ewm.exception.NotFoundException;
+import ru.practicum.explorewithme.ewm.exception.ValidationException;
 import ru.practicum.explorewithme.ewm.request.db.Request;
 import ru.practicum.explorewithme.ewm.request.db.RequestRepository;
 import ru.practicum.explorewithme.ewm.users.db.User;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -72,12 +75,50 @@ class RequestServiceImplTest {
 
 
     @Test
-    void getAllByRequester() {
+    void getAllByRequester_shouldReturnTheSame() {
+        Request request = Request.builder().id(DEFAULT_ID).build();
+        when(requestRepository.findAllByRequesterId(anyLong())).thenReturn(List.of(request));
+
+        var result = requestService.getAllByRequester(anyLong());
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(request, result.get(0));
     }
 
     @Test
-    void cancel() {
+    void cancel_shouldInvokeRequestRepositoryDelete() {
+        Request request = Request.builder()
+                .id(DEFAULT_ID)
+                .requester(User.builder().id(ANOTHER_ID).build())
+                .build();
+
+        when(requestRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(request));
+
+        requestService.cancel(ANOTHER_ID, DEFAULT_ID);
+
+        verify(requestRepository, times(1)).delete(request);
     }
+
+    @Test
+    void cancel_shouldThrow_whenRequestNotFound(){
+        when(requestRepository.findById(DEFAULT_ID)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, ()->requestService.cancel(ANOTHER_ID,DEFAULT_ID));
+    }
+
+    @Test
+    void cancel_shouldThrow_whenUserIsNotRequester(){
+        Request request = Request.builder()
+                .id(DEFAULT_ID)
+                .requester(User.builder().id(ANOTHER_ID).build())
+                .build();
+
+        when(requestRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(request));
+
+        assertThrows(ValidationException.class, ()->requestService.cancel(DEFAULT_ID,DEFAULT_ID));
+    }
+
 
     private static Stream<Arguments> createDataForThrowException() {
         return Stream.of(
