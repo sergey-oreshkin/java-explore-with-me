@@ -25,7 +25,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static java.lang.String.valueOf;
 
 @Service
 @RequiredArgsConstructor
@@ -104,7 +103,9 @@ public class EventServiceImpl implements EventService {
     public Event setEventState(Long eventId, EventState state) {
         Event event = getEventOrThrow(eventId);
         event.setState(state);
-        event.setPublished(LocalDateTime.now());
+        if (state == EventState.PUBLISHED) {
+            event.setPublished(LocalDateTime.now());
+        }
         return eventRepository.save(event);
     }
 

@@ -101,14 +101,14 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void cancel_shouldThrow_whenRequestNotFound(){
+    void cancel_shouldThrow_whenRequestNotFound() {
         when(requestRepository.findById(DEFAULT_ID)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, ()->requestService.cancel(ANOTHER_ID,DEFAULT_ID));
+        assertThrows(NotFoundException.class, () -> requestService.cancel(ANOTHER_ID, DEFAULT_ID));
     }
 
     @Test
-    void cancel_shouldThrow_whenUserIsNotRequester(){
+    void cancel_shouldThrow_whenUserIsNotRequester() {
         Request request = Request.builder()
                 .id(DEFAULT_ID)
                 .requester(User.builder().id(ANOTHER_ID).build())
@@ -116,7 +116,7 @@ class RequestServiceImplTest {
 
         when(requestRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(request));
 
-        assertThrows(ValidationException.class, ()->requestService.cancel(DEFAULT_ID,DEFAULT_ID));
+        assertThrows(ValidationException.class, () -> requestService.cancel(DEFAULT_ID, DEFAULT_ID));
     }
 
 

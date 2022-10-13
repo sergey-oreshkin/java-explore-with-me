@@ -4,15 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.explorewithme.ewm.category.db.Category;
 import ru.practicum.explorewithme.ewm.category.db.CategoryRepository;
-import ru.practicum.explorewithme.ewm.common.OffsetLimitPageable;
 import ru.practicum.explorewithme.ewm.exception.NotFoundException;
 
 import java.util.List;
@@ -66,7 +62,7 @@ class CategoryServiceImplTest {
         Integer size = 10;
         when(categoryRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(category)));
 
-        var result = categoryService.getAll(from,size);
+        var result = categoryService.getAll(from, size);
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -84,10 +80,10 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void getById_shouldThrow_WhenRepositoryReturnEmpty(){
+    void getById_shouldThrow_WhenRepositoryReturnEmpty() {
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, ()-> categoryService.getById(anyLong()));
+        assertThrows(NotFoundException.class, () -> categoryService.getById(anyLong()));
     }
 
     @Test
