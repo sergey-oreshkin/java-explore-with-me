@@ -24,8 +24,8 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> get(@RequestParam(name = "ids", required = false) List<Long> ids,
-                             @RequestParam(name = "from", required = false) Integer from,
-                             @RequestParam(name = "size", required = false) Integer size) {
+                             @RequestParam(name = "from", defaultValue = "0") Integer from,
+                             @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return mapper.toDto(userService.get(from, size, ids));
     }
 

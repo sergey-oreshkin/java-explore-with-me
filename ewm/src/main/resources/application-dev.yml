@@ -6,3 +6,8 @@ spring:
     password: test
   jpa:
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+stats-server:
+  url: http://localhost:9090

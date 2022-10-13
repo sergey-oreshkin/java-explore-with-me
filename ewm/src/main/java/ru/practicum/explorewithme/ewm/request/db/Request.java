@@ -1,9 +1,6 @@
 package ru.practicum.explorewithme.ewm.request.db;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import ru.practicum.explorewithme.ewm.event.db.Event;
@@ -20,6 +17,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "requests")
+@Builder
 public class Request {
 
     @Id
