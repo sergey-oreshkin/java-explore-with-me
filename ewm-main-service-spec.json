@@ -1319,6 +1319,117 @@
       }
     },
     "/admin/events/{eventId}/reject": {
+      "post": {
+        "description": "Обратите внимание: событие не должно быть опубликовано.",
+        "operationId": "rejectEvent",
+        "parameters": [
+          {
+            "description": "id события",
+            "in": "path",
+            "name": "eventId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminCommentDto"
+              }
+            }
+          },
+          "description": "Данные для изменения информации о событии",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventFullDto"
+                }
+              }
+            },
+            "description": "Событие отклонено"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Запрос составлен с ошибкой"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Не выполнены условия для совершения операции"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "NOT_FOUND",
+                  "reason": "The required object was not found.",
+                  "message": "Event with id=21 was not found.",
+                  "timestamp": "2022-09-07 09:10:50"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Объект не найден"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "CONFLICT",
+                  "reason": "Integrity constraint has been violated",
+                  "message": "could not execute statement; SQL [n/a]; constraint [uq_category_name]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement",
+                  "timestamp": "2022-09-07 10:47:58"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Запрос приводит к нарушению целостности данных"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "INTERNAL_SERVER_ERROR",
+                  "reason": "Error occurred",
+                  "message": "could not execute statement; SQL [n/a]; constraint [uq_category_name]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement",
+                  "timestamp": "2022-09-07 10:23:27"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "description": "Внутренняя ошибка сервера"
+          }
+        },
+        "summary": "Отклонение события с комментарием",
+        "tags": [
+          "Admin: События"
+        ]
+      },
       "patch": {
         "description": "Обратите внимание: событие не должно быть опубликовано.",
         "operationId": "rejectEvent",
@@ -4465,6 +4576,19 @@
           }
         },
         "description": "Пользователь (краткая информация)"
+      },
+      "AdminCommentDto": {
+        "required": [
+          "comment"
+        ],
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string",
+            "description": "Комментарий администратора",
+            "example": "Данное событие должно иметь ограничение по количеству участников"
+          }
+        }
       }
     }
   }
