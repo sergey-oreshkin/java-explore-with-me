@@ -33,6 +33,8 @@ public class Event {
 
     private String annotation;
 
+    private String adminComment;
+
     @ManyToOne
     @JoinColumn(name = "initiator")
     private User initiator;

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.ewm.event.db.Event;
-import ru.practicum.explorewithme.ewm.event.dto.EventDto;
+import ru.practicum.explorewithme.ewm.event.dto.EventFullDto;
 import ru.practicum.explorewithme.ewm.event.dto.NewEventDto;
 import ru.practicum.explorewithme.ewm.event.service.EventMapper;
 import ru.practicum.explorewithme.ewm.event.service.EventService;
@@ -28,31 +28,31 @@ public class UserEventController {
     private final RequestMapper requestMapper;
 
     @PostMapping
-    public EventDto create(@Valid @RequestBody NewEventDto eventDto, @PathVariable @NotNull Long userId) {
+    public EventFullDto create(@Valid @RequestBody NewEventDto eventDto, @PathVariable @NotNull Long userId) {
         Event event = eventMapper.toEntity(eventDto, userId);
         return eventMapper.toDto(eventService.create(event));
     }
 
     @PatchMapping
-    public EventDto update(@RequestBody NewEventDto eventDto, @PathVariable @NotNull Long userId) {
+    public EventFullDto update(@RequestBody NewEventDto eventDto, @PathVariable @NotNull Long userId) {
         Event event = eventMapper.toEntity(eventDto, userId);
         return eventMapper.toDto(eventService.update(event));
     }
 
     @GetMapping
-    public List<EventDto> getAll(@PathVariable @NotNull Long userId,
-                                 @RequestParam(name = "from", required = false) Integer from,
-                                 @RequestParam(name = "size", required = false) Integer size) {
+    public List<EventFullDto> getAll(@PathVariable @NotNull Long userId,
+                                     @RequestParam(name = "from", required = false) Integer from,
+                                     @RequestParam(name = "size", required = false) Integer size) {
         return eventMapper.toDto(eventService.getAll(userId, from, size));
     }
 
     @GetMapping("{eventId}")
-    public EventDto get(@PathVariable @NotNull Long userId, @PathVariable @NotNull Long eventId) {
+    public EventFullDto get(@PathVariable @NotNull Long userId, @PathVariable @NotNull Long eventId) {
         return eventMapper.toDto(eventService.get(userId, eventId));
     }
 
     @PatchMapping("{eventId}")
-    public EventDto cancel(@PathVariable @NotNull Long userId, @PathVariable @NotNull Long eventId) {
+    public EventFullDto cancel(@PathVariable @NotNull Long userId, @PathVariable @NotNull Long eventId) {
         return eventMapper.toDto(eventService.cancel(userId, eventId));
     }
 

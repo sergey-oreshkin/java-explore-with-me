@@ -21,7 +21,7 @@ public interface EventService {
     List<Event> getAll(List<Long> users, List<EventState> states, List<Long> categories,
                        LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
-    Event setEventState(Long eventId, EventState state);
+    Event setEventState(Long eventId, EventState state, String comment);
 
     List<Request> getRequests(Long userId, Long eventId);
 

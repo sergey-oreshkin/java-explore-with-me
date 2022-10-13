@@ -13,10 +13,11 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventDto {
+public class EventFullDto {
     private Long id;
     private String title;
     private String description;
+    private String adminComment;
     private String annotation;
     private CategoryDto category;
     private ShortUserDto initiator;
