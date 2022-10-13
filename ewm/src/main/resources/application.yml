@@ -17,6 +17,6 @@ app:
     event: /events
 
 stats-server:
-  url: http://localhost:9090
+  url: ${STATS-SERVER_URL}
   getPath: /stats
   postPath: /hit

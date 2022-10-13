@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.ewm.common.OffsetLimitPageable;
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<User> get(Integer from, Integer size, List<Long> idx) {
+    public List<User> get(Integer from, Integer size, @Nullable List<Long> idx) {
         Pageable pageable = OffsetLimitPageable.of(from, size);
         if (idx == null) {
             return userRepository.findAll(pageable).getContent();

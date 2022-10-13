@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.statsserver.stats.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.statsserver.stats.db.Stats;
 import ru.practicum.explorewithme.statsserver.stats.db.StatsRepository;
@@ -21,7 +22,7 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<HitsDto> get(List<String> uris, Boolean unique, LocalDateTime start, LocalDateTime end, String appName) {
+    public List<HitsDto> get(@Nullable List<String> uris, Boolean unique, LocalDateTime start, LocalDateTime end, String appName) {
         List<HitsDto> hits = statsRepository.getHits(uris, unique, start, end, appName);
         hits.forEach(h -> h.setApp(appName));
         return hits;

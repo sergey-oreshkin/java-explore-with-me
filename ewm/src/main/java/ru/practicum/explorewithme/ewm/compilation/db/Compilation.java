@@ -1,9 +1,6 @@
 package ru.practicum.explorewithme.ewm.compilation.db;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.practicum.explorewithme.ewm.event.db.Event;
 
 import javax.persistence.*;
@@ -15,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "compilations")
+@Builder
 public class Compilation {
 
     @Id
