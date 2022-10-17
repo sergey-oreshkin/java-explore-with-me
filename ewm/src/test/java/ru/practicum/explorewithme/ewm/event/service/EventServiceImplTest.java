@@ -78,7 +78,7 @@ class EventServiceImplTest {
         when(eventRepository.findById(newEvent.getId())).thenReturn(Optional.of(oldEvent));
         when(eventRepository.save(any())).thenAnswer(returnsFirstArg());
 
-        var result = eventService.update(newEvent);
+        var result = eventService.update(newEvent, true);
 
         verify(eventRepository, times(1)).save(any());
 
@@ -89,10 +89,10 @@ class EventServiceImplTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("dataForUpdateTest")
-    void update_shouldThrow(String name, Event event, Optional<Event> optional, Class<Exception> exceptionClass) {
+    void update_shouldThrow(String name, Event event, Optional<Event> optional,boolean isAdmin, Class<Exception> exceptionClass) {
         lenient().when(eventRepository.findById(anyLong())).thenReturn(optional);
 
-        assertThrows(exceptionClass, () -> eventService.update(event));
+        assertThrows(exceptionClass, () -> eventService.update(event, isAdmin));
     }
 
     private static Stream<Arguments> dataForUpdateTest() {
@@ -102,24 +102,28 @@ class EventServiceImplTest {
                         "ValidationException when date is illegal",
                         Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MIN).build(),
                         Optional.of(defaultEvent),
+                        true,
                         ValidationException.class
                 ),
                 Arguments.of(
                         "NotFoundException when id not found",
                         Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MIN).build(),
                         Optional.empty(),
+                        true,
                         NotFoundException.class
                 ),
                 Arguments.of(
-                        "ConflictException when state is PUBLISHED",
+                        "ConflictException when state is PUBLISHED and not admin",
                         Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MAX).state(EventState.PUBLISHED).build(),
                         Optional.of(Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MAX).state(EventState.PUBLISHED).build()),
+                        false,
                         ConflictException.class
                 ),
                 Arguments.of(
                         "ValidationException when id is null",
                         Event.builder().build(),
                         Optional.of(defaultEvent),
+                        true,
                         ValidationException.class
                 )
         );

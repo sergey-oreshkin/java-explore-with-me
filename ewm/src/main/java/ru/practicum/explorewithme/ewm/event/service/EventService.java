@@ -10,7 +10,7 @@ import java.util.List;
 public interface EventService {
     Event create(Event event);
 
-    Event update(Event event);
+    Event update(Event event, boolean isAdmin);
 
     List<Event> getAll(Long userId, Integer from, Integer size);
 

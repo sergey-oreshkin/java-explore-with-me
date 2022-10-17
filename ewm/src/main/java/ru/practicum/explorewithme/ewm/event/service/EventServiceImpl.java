@@ -51,13 +51,13 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public Event update(Event event) {
+    public Event update(Event event, boolean isAdmin) {
         if (event.getId() == null) {
             throw new ValidationException("Event id must not be null", "EventId=null");
         }
         Event oldEvent = eventRepository.findById(event.getId())
                 .orElseThrow(() -> new NotFoundException("Event not found", format("Id=%d", event.getId())));
-        if (oldEvent.getState() == EventState.PUBLISHED) {
+        if (!isAdmin && oldEvent.getState() == EventState.PUBLISHED) {
             throw new ConflictException("Published event can not be changed", EventState.PUBLISHED.toString());
         }
         if (event.getEventDate() != null) {

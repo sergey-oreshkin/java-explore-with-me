@@ -41,7 +41,7 @@ public class AdminEventController {
     public EventFullDto update(@PathVariable @NotNull Long eventId, @RequestBody NewEventDto eventDto) {
         Event event = mapper.toEntity(eventDto);
         event.setId(eventId);
-        return mapper.toDto(eventService.update(event));
+        return mapper.toDto(eventService.update(event, true));
     }
 
     @PatchMapping("{eventId}/publish")
