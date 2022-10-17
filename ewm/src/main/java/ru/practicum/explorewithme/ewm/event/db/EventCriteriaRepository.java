@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.explorewithme.ewm.event.dto.EventState;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -53,9 +54,15 @@ public class EventCriteriaRepository implements CustomEventRepository {
                             cb.like(cb.upper(event.get("description")), "%" + text.toUpperCase() + "%"))
             );
         }
+        EntityGraph<Event> entityGraph = em.createEntityGraph(Event.class);
+        entityGraph.addAttributeNodes("initiator");
+        entityGraph.addAttributeNodes("category");
+        entityGraph.addSubgraph("requests").addAttributeNodes("requester");
+
         return em.createQuery(query.select(event).where(cb.and(predicates.toArray(predicates.toArray(new Predicate[]{})))))
                 .setFirstResult(from)
                 .setMaxResults(size)
+                .setHint("javax.persistence.fetchgraph", entityGraph)
                 .getResultList();
     }
 }
