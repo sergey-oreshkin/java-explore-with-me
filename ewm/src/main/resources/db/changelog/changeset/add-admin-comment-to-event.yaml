@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_admin_comment_column
+      author: Sergey Oreshkin
+      changes:
+        - addColumn:
+            tableName: events
+            columns:
+              - column:
+                  name: admin_comment
+                  type: varchar

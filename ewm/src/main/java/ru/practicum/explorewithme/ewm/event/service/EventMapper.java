@@ -8,7 +8,8 @@ import ru.practicum.explorewithme.ewm.category.factory.CategoryFactory;
 import ru.practicum.explorewithme.ewm.common.SortType;
 import ru.practicum.explorewithme.ewm.configuration.PropertiesService;
 import ru.practicum.explorewithme.ewm.event.db.Event;
-import ru.practicum.explorewithme.ewm.event.dto.EventDto;
+import ru.practicum.explorewithme.ewm.event.dto.EventFullDto;
+import ru.practicum.explorewithme.ewm.event.dto.EventPublicDto;
 import ru.practicum.explorewithme.ewm.event.dto.NewEventDto;
 import ru.practicum.explorewithme.ewm.request.dto.RequestState;
 import ru.practicum.explorewithme.ewm.stats.HttpClient;
@@ -51,21 +52,42 @@ public abstract class EventMapper {
     @Mapping(target = "location.lon", source = "event.longitude")
     @Mapping(target = "views", expression = "java(getViews(event))")
     @Mapping(target = "confirmedRequests", expression = "java(getConfirmedRequests(event))")
-    public abstract EventDto toDto(Event event);
+    public abstract EventPublicDto toPublicDto(Event event);
 
-    public abstract List<EventDto> toDto(List<Event> events);
+    @Mapping(target = "publishedOn", source = "event.published")
+    @Mapping(target = "createdOn", source = "event.created")
+    @Mapping(target = "location.lat", source = "event.latitude")
+    @Mapping(target = "location.lon", source = "event.longitude")
+    @Mapping(target = "views", expression = "java(getViews(event))")
+    @Mapping(target = "confirmedRequests", expression = "java(getConfirmedRequests(event))")
+    public abstract EventFullDto toDto(Event event);
 
-    public List<EventDto> toDto(List<Event> events, SortType sortType) {
+    public abstract List<EventFullDto> toDto(List<Event> events);
+
+    public abstract List<EventPublicDto> toPublicDto(List<Event> events);
+
+    public List<EventFullDto> toDto(List<Event> events, SortType sortType) {
         if (Objects.isNull(sortType)) {
             return toDto(events);
         }
-        Comparator<EventDto> comparator;
+        Comparator<EventFullDto> comparator = Comparator.comparing(EventFullDto::getEventDate);
         if (sortType == SortType.VIEWS) {
-            comparator = Comparator.comparing(EventDto::getViews);
-        } else {
-            comparator = Comparator.comparing(EventDto::getEventDate);
+            comparator = Comparator.comparing(EventFullDto::getViews);
         }
-        List<EventDto> eventDtos = toDto(events);
+        List<EventFullDto> eventDtos = toDto(events);
+        eventDtos.sort(comparator);
+        return eventDtos;
+    }
+
+    public List<EventPublicDto> toPublicDto(List<Event> events, SortType sortType) {
+        if (Objects.isNull(sortType)) {
+            return toPublicDto(events);
+        }
+        Comparator<EventPublicDto> comparator = Comparator.comparing(EventPublicDto::getEventDate);
+        if (sortType == SortType.VIEWS) {
+            comparator = Comparator.comparing(EventPublicDto::getViews);
+        }
+        List<EventPublicDto> eventDtos = toPublicDto(events);
         eventDtos.sort(comparator);
         return eventDtos;
     }

@@ -196,7 +196,7 @@ class EventServiceImplTest {
         when(eventRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(event));
         when(eventRepository.save(any())).thenAnswer(returnsFirstArg());
 
-        var result = eventService.setEventState(DEFAULT_ID, EventState.PUBLISHED);
+        var result = eventService.setEventState(DEFAULT_ID, EventState.PUBLISHED, null);
 
         verify(eventRepository, times(1)).save(any());
 

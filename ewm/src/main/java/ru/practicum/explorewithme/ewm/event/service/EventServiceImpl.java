@@ -3,6 +3,7 @@ package ru.practicum.explorewithme.ewm.event.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.ewm.common.OffsetLimitPageable;
@@ -100,11 +101,14 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public Event setEventState(Long eventId, EventState state) {
+    public Event setEventState(Long eventId, EventState state, @Nullable String comment) {
         Event event = getEventOrThrow(eventId);
         event.setState(state);
         if (state == EventState.PUBLISHED) {
             event.setPublished(LocalDateTime.now());
+        }
+        if (Objects.nonNull(comment) && state == EventState.CANCELED) {
+            event.setAdminComment(comment);
         }
         return eventRepository.save(event);
     }
