@@ -206,6 +206,24 @@ class EventServiceImplTest {
     }
 
     @Test
+    void setEventState_shouldInvokeRepositoryAndReturnWithNewAndComment() {
+        final String comment = "comment";
+        Event event = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MAX).state(EventState.PENDING).adminComment(comment).build();
+        when(eventRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(event));
+        when(eventRepository.save(any())).thenAnswer(returnsFirstArg());
+
+        var result = eventService.setEventState(DEFAULT_ID, EventState.PUBLISHED, null);
+
+        verify(eventRepository, times(1)).save(any());
+
+        assertNotNull(result);
+        assertEquals(EventState.PUBLISHED, result.getState());
+        assertNotNull(result.getPublished());
+        assertNotNull(result.getAdminComment());
+        assertEquals(comment, result.getAdminComment());
+    }
+
+    @Test
     void getRequests_shouldReturnListOfEventRequests() {
         Request request = Request.builder().id(DEFAULT_ID).build();
         User user = User.builder().id(DEFAULT_ID).build();
