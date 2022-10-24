@@ -24,9 +24,9 @@ public class ControllerLogAspect {
 
     @Around("@annotation(controllerLog)")
     public Object controllerLogAdvice(ProceedingJoinPoint pjp, ControllerLog controllerLog) throws Throwable {
-        Object[] args = pjp.getArgs();
-        MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
-        HttpServletRequest request = (HttpServletRequest) Arrays.stream(args)
+        final Object[] args = pjp.getArgs();
+        final MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
+        final HttpServletRequest request = (HttpServletRequest) Arrays.stream(args)
                 .filter(arg -> arg instanceof HttpServletRequest)
                 .findFirst()
                 .orElse(null);
