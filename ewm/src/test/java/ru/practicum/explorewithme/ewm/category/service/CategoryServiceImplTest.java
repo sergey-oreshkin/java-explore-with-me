@@ -9,10 +9,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.explorewithme.ewm.category.db.Category;
 import ru.practicum.explorewithme.ewm.category.db.CategoryRepository;
+import ru.practicum.explorewithme.ewm.event.db.Event;
+import ru.practicum.explorewithme.ewm.exception.ConflictException;
 import ru.practicum.explorewithme.ewm.exception.NotFoundException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -29,7 +33,8 @@ class CategoryServiceImplTest {
 
     @InjectMocks
     CategoryServiceImpl categoryService;
-    Category category = Category.builder().id(DEFAULT_ID).name(DEFAULT_NAME).build();
+
+    final Category category = Category.builder().id(DEFAULT_ID).name(DEFAULT_NAME).events(new HashSet<>()).build();
 
     @Test
     void create_shouldInvokeCategoryRepositoryAndReturnTheSame() {
@@ -88,8 +93,26 @@ class CategoryServiceImplTest {
 
     @Test
     void delete_shouldInvokeCategoryRepositoryDelete() {
-        categoryService.delete(anyLong());
+        when(categoryRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(category));
+        categoryService.delete(DEFAULT_ID);
 
-        verify(categoryRepository, times(1)).deleteById(anyLong());
+        verify(categoryRepository, times(1)).deleteById(DEFAULT_ID);
     }
+
+    @Test
+    void delete_shouldThrow_whenEventsIsNotEmpty() {
+        final Event event = Event.builder().build();
+        final Set<Event> events = new HashSet<>();
+        events.add(event);
+        final Category category = Category.builder()
+                .id(DEFAULT_ID)
+                .name(DEFAULT_NAME)
+                .events(events)
+                .build();
+
+        when(categoryRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(category));
+
+        assertThrows(ConflictException.class, () -> categoryService.delete(DEFAULT_ID));
+    }
+
 }

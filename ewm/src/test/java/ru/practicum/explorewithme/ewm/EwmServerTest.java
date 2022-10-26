@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class EwmServerTest {
 
     @Test
-    void contextLoadTest(){
+    void contextLoadTest() {
 
     }
 }

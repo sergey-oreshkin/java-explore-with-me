@@ -52,7 +52,7 @@ class EventServiceImplTest {
 
     @Test
     void create_shouldInvokeRepositoryAndReturnTheSame() {
-        Event event = Event.builder().eventDate(LocalDateTime.MAX).build();
+        final Event event = Event.builder().eventDate(LocalDateTime.MAX).build();
         when(eventRepository.save(any())).thenAnswer(returnsFirstArg());
 
         var result = eventService.create(event);
@@ -65,15 +65,15 @@ class EventServiceImplTest {
 
     @Test
     void create_shouldThrow_whenDateIsIllegal() {
-        Event event = Event.builder().eventDate(LocalDateTime.MIN).build();
+        final Event event = Event.builder().eventDate(LocalDateTime.MIN).build();
 
         assertThrows(ValidationException.class, () -> eventService.create(event));
     }
 
     @Test
     void update_shouldInvokeRepositoryAndReturnUpdated() {
-        Event newEvent = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MAX).title("new title").build();
-        Event oldEvent = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MAX).title("old title").build();
+        final Event newEvent = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MAX).title("new title").build();
+        final Event oldEvent = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MAX).title("old title").build();
 
         when(eventRepository.findById(newEvent.getId())).thenReturn(Optional.of(oldEvent));
         when(eventRepository.save(any())).thenAnswer(returnsFirstArg());
@@ -89,14 +89,14 @@ class EventServiceImplTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("dataForUpdateTest")
-    void update_shouldThrow(String name, Event event, Optional<Event> optional,boolean isAdmin, Class<Exception> exceptionClass) {
+    void update_shouldThrow(String name, Event event, Optional<Event> optional, boolean isAdmin, Class<Exception> exceptionClass) {
         lenient().when(eventRepository.findById(anyLong())).thenReturn(optional);
 
         assertThrows(exceptionClass, () -> eventService.update(event, isAdmin));
     }
 
     private static Stream<Arguments> dataForUpdateTest() {
-        Event defaultEvent = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MIN).build();
+        final Event defaultEvent = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MIN).build();
         return Stream.of(
                 Arguments.of(
                         "ValidationException when date is illegal",
@@ -131,7 +131,7 @@ class EventServiceImplTest {
 
     @Test
     void getAll_shouldReturnTheSame() {
-        Event event = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MIN).build();
+        final Event event = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MIN).build();
         when(eventRepository.findAllByInitiatorId(anyLong(), any(OffsetLimitPageable.class))).thenReturn(List.of(event));
 
         var result = eventService.getAll(DEFAULT_ID, 0, 10);
@@ -143,8 +143,8 @@ class EventServiceImplTest {
 
     @Test
     void get_shouldReturnTheSame() {
-        User user = User.builder().id(DEFAULT_ID).build();
-        Event event = Event.builder().id(DEFAULT_ID).initiator(user).build();
+        final User user = User.builder().id(DEFAULT_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).initiator(user).build();
         when(eventRepository.findByIdAndInitiator(DEFAULT_ID, user)).thenReturn(Optional.of(event));
         when(userFactory.getById(DEFAULT_ID)).thenReturn(user);
 
@@ -156,8 +156,8 @@ class EventServiceImplTest {
 
     @Test
     void cancel_shouldReturnTheSame() {
-        User user = User.builder().id(DEFAULT_ID).build();
-        Event event = Event.builder().id(DEFAULT_ID).build();
+        final User user = User.builder().id(DEFAULT_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).build();
         when(userFactory.getById(DEFAULT_ID)).thenReturn(user);
         when(eventRepository.findByIdAndInitiator(DEFAULT_ID, user)).thenReturn(Optional.of(event));
         when(eventRepository.save(any())).thenAnswer(returnsFirstArg());
@@ -172,8 +172,8 @@ class EventServiceImplTest {
 
     @Test
     void cancel_shouldThrow_whenStateIsPublished() {
-        User user = User.builder().id(DEFAULT_ID).build();
-        Event event = Event.builder().id(DEFAULT_ID).state(EventState.PUBLISHED).build();
+        final User user = User.builder().id(DEFAULT_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).state(EventState.PUBLISHED).build();
         when(userFactory.getById(DEFAULT_ID)).thenReturn(user);
         when(eventRepository.findByIdAndInitiator(DEFAULT_ID, user)).thenReturn(Optional.of(event));
 
@@ -182,7 +182,7 @@ class EventServiceImplTest {
 
     @Test
     void parametrizedGetAll_shouldReturnTheSame() {
-        Event event = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MIN).build();
+        final Event event = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MIN).build();
         when(eventRepository.findAllByParameters(anyList(), anyList(), anyList(), eq(null), any(), any(), eq(null), eq(null), anyInt(), anyInt()))
                 .thenReturn(List.of(event, event));
 
@@ -196,7 +196,7 @@ class EventServiceImplTest {
 
     @Test
     void setEventState_shouldInvokeRepositoryAndReturnWithNewState() {
-        Event event = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MAX).state(EventState.PENDING).build();
+        final Event event = Event.builder().id(DEFAULT_ID).eventDate(LocalDateTime.MAX).state(EventState.PENDING).build();
         when(eventRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(event));
         when(eventRepository.save(any())).thenAnswer(returnsFirstArg());
 
@@ -211,9 +211,9 @@ class EventServiceImplTest {
 
     @Test
     void getRequests_shouldReturnListOfEventRequests() {
-        Request request = Request.builder().id(DEFAULT_ID).build();
-        User user = User.builder().id(DEFAULT_ID).build();
-        Event event = Event.builder().id(DEFAULT_ID).requests(Set.of(request)).initiator(user).build();
+        final Request request = Request.builder().id(DEFAULT_ID).build();
+        final User user = User.builder().id(DEFAULT_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).requests(Set.of(request)).initiator(user).build();
         when(eventRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(event));
 
         var result = eventService.getRequests(DEFAULT_ID, DEFAULT_ID);
@@ -224,8 +224,8 @@ class EventServiceImplTest {
 
     @Test
     void getRequests_shouldThrow_whenUserIdIsNotInitiator() {
-        User user = User.builder().id(DEFAULT_ID).build();
-        Event event = Event.builder().id(DEFAULT_ID).initiator(user).build();
+        final User user = User.builder().id(DEFAULT_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).initiator(user).build();
         when(eventRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(event));
 
         assertThrows(ValidationException.class, () -> eventService.getRequests(ANOTHER_ID, DEFAULT_ID));
@@ -233,9 +233,9 @@ class EventServiceImplTest {
 
     @Test
     void confirm_shouldSetRequestToConfirmedAndReturnTheSame() {
-        Request request = Request.builder().id(DEFAULT_ID).build();
-        User user = User.builder().id(DEFAULT_ID).build();
-        Event event = Event.builder().id(DEFAULT_ID).requests(Set.of(request)).requestModeration(true).initiator(user).build();
+        final Request request = Request.builder().id(DEFAULT_ID).build();
+        final User user = User.builder().id(DEFAULT_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).requests(Set.of(request)).requestModeration(true).initiator(user).build();
         when(eventRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(event));
         when(eventRepository.save(any())).thenAnswer(returnsFirstArg());
 
@@ -296,9 +296,9 @@ class EventServiceImplTest {
 
     @Test
     void reject_shouldSetRequestToRejectedAndReturnTheSame() {
-        Request request = Request.builder().id(DEFAULT_ID).build();
-        User user = User.builder().id(DEFAULT_ID).build();
-        Event event = Event.builder().id(DEFAULT_ID).requests(new HashSet<>(List.of(request))).requestModeration(true).initiator(user).build();
+        final Request request = Request.builder().id(DEFAULT_ID).build();
+        final User user = User.builder().id(DEFAULT_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).requests(new HashSet<>(List.of(request))).requestModeration(true).initiator(user).build();
         when(eventRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(event));
         when(eventRepository.save(any())).thenAnswer(returnsFirstArg());
 
@@ -348,7 +348,7 @@ class EventServiceImplTest {
 
     @Test
     void getPublishedById_shouldReturnPublishedEventById() {
-        Event event = Event.builder().id(DEFAULT_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).build();
         when(eventRepository.findByIdAndState(DEFAULT_ID, EventState.PUBLISHED)).thenReturn(Optional.of(event));
 
         var result = eventService.getPublishedById(DEFAULT_ID);
@@ -366,7 +366,7 @@ class EventServiceImplTest {
 
     @Test
     void getAllPublished_shouldReturnAllByParams() {
-        Event event = Event.builder().id(DEFAULT_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).build();
         when(eventRepository.findAllByParameters(eq(null), eq(List.of(EventState.PUBLISHED)), anyList(), anyBoolean(), any(), any(), anyString(), anyBoolean(), anyInt(), anyInt()))
                 .thenReturn(List.of(event));
 
@@ -380,14 +380,14 @@ class EventServiceImplTest {
 
     @Test
     void isRequestLimit_shouldReturnFalse_whenLimitIsZero() {
-        Event event = Event.builder().participantLimit(0).build();
+        final Event event = Event.builder().participantLimit(0).build();
 
         assertFalse(eventService.isRequestLimit(event));
     }
 
     @Test
     void isRequestLimit_shouldReturnTrue_whenConfirmedRequestCountEqualOrMoreThenParticipantLimit() {
-        Event event = Event.builder().participantLimit(1)
+        final Event event = Event.builder().participantLimit(1)
                 .requests(new HashSet<>(List.of(Request.builder().id(DEFAULT_ID).state(RequestState.CONFIRMED).build())))
                 .build();
 
