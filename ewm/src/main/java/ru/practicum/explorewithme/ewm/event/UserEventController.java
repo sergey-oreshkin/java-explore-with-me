@@ -29,13 +29,13 @@ public class UserEventController {
 
     @PostMapping
     public EventFullDto create(@Valid @RequestBody NewEventDto eventDto, @PathVariable @NotNull Long userId) {
-        Event event = eventMapper.toEntity(eventDto, userId);
+        final Event event = eventMapper.toEntity(eventDto, userId);
         return eventMapper.toDto(eventService.create(event));
     }
 
     @PatchMapping
     public EventFullDto update(@RequestBody NewEventDto eventDto, @PathVariable @NotNull Long userId) {
-        Event event = eventMapper.toEntity(eventDto, userId);
+        final Event event = eventMapper.toEntity(eventDto, userId);
         return eventMapper.toDto(eventService.update(event, false));
     }
 

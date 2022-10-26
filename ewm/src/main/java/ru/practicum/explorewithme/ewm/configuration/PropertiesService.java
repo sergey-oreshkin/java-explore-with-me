@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Data
-@RequiredArgsConstructor
 public class PropertiesService {
 
     @Value("${app.format.date-time}")

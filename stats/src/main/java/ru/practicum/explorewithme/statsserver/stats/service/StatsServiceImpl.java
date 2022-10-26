@@ -23,7 +23,7 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<HitsDto> get(@Nullable List<String> uris, Boolean unique, LocalDateTime start, LocalDateTime end, String appName) {
-        List<HitsDto> hits = statsRepository.getHits(uris, unique, start, end, appName);
+        final List<HitsDto> hits = statsRepository.getHits(uris, unique, start, end, appName);
         hits.forEach(h -> h.setApp(appName));
         return hits;
     }

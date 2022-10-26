@@ -19,7 +19,7 @@ public class NewEventDto {
 
     private Long eventId;
 
-    @NotBlank
+    @NotNull
     @Size(max = 1024)
     private String title;
 

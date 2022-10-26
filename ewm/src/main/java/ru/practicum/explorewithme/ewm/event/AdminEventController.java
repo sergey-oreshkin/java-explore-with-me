@@ -39,7 +39,7 @@ public class AdminEventController {
 
     @PutMapping("{eventId}")
     public EventFullDto update(@PathVariable @NotNull Long eventId, @RequestBody NewEventDto eventDto) {
-        Event event = mapper.toEntity(eventDto);
+        final Event event = mapper.toEntity(eventDto);
         event.setId(eventId);
         return mapper.toDto(eventService.update(event, true));
     }

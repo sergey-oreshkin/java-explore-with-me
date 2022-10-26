@@ -2,9 +2,11 @@ package ru.practicum.explorewithme.ewm.category.db;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import ru.practicum.explorewithme.ewm.event.db.Event;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,8 +21,11 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false,unique = true, length = 255)
+    @Column(name = "name", nullable = false, unique = true, length = 255)
     private String name;
+
+    @OneToMany(mappedBy = "category")
+    private Set<Event> events;
 
     @Override
     public boolean equals(Object o) {

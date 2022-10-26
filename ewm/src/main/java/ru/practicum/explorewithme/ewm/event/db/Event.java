@@ -76,6 +76,7 @@ public class Event {
     Set<Request> requests = new HashSet<>();
 
     @ManyToMany(mappedBy = "events")
+    @JsonIgnore
     Set<Compilation> compilations = new HashSet<>();
 
     @Override

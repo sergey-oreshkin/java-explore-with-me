@@ -1321,7 +1321,7 @@
     "/admin/events/{eventId}/reject": {
       "post": {
         "description": "Обратите внимание: событие не должно быть опубликовано.",
-        "operationId": "rejectEvent",
+        "operationId": "rejectEventWithComment",
         "parameters": [
           {
             "description": "id события",

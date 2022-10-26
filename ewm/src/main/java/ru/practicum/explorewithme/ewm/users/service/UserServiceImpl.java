@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> get(Integer from, Integer size, @Nullable List<Long> idx) {
-        Pageable pageable = OffsetLimitPageable.of(from, size);
+        final Pageable pageable = OffsetLimitPageable.of(from, size);
         if (idx == null) {
             return userRepository.findAll(pageable).getContent();
         }

@@ -64,10 +64,3 @@ databaseChangeLog:
               - column:
                   name: longitude
                   type: decimal
-        - addForeignKeyConstraint:
-            constraintName: category_on_delete
-            baseTableName: events
-            baseColumnNames: category
-            referencedTableName: categories
-            referencedColumnNames: id
-            onDelete: cascade

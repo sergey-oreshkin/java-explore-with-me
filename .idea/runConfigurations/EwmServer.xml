@@ -1,14 +1,18 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="EwmServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-    <option name="ACTIVE_PROFILES" value="dev" />
+  <configuration default="false" name="EwmServer" type="Application" factoryName="Application" nameIsGenerated="true">
+    <envs>
+      <env name="SPRING_PROFILES_ACTIVE" value="dev" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="ru.practicum.explorewithme.ewm.EwmServer" />
     <module name="ewm" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="ru.practicum.explorewithme.ewm.EwmServer" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="ru.practicum.explorewithme.ewm.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <method v="2" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
   </configuration>
 </component>

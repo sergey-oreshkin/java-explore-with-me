@@ -61,7 +61,7 @@ public class StatsClient implements HttpClient {
 
     @Override
     public void hit(HttpServletRequest request) throws HttpClientException {
-        HttpEntity<StatsDto> requestBody = new HttpEntity<>(
+        final HttpEntity<StatsDto> requestBody = new HttpEntity<>(
                 StatsDto.builder()
                         .app(defaultAppName)
                         .uri(request.getRequestURI())
@@ -69,7 +69,7 @@ public class StatsClient implements HttpClient {
                         .timestamp(LocalDateTime.now()).build()
         );
 
-        ResponseEntity<String> response = restTemplate.postForEntity(postPath, requestBody, String.class);
+        final ResponseEntity<String> response = restTemplate.postForEntity(postPath, requestBody, String.class);
 
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new HttpClientException(format("Stats server response code is %d, error: %s",
@@ -91,10 +91,10 @@ public class StatsClient implements HttpClient {
             parameters.put("end", endTime);
         }
 
-        ResponseEntity<String> response = restTemplate.getForEntity(getUriWithParams(getPath, parameters), String.class);
+        final ResponseEntity<String> response = restTemplate.getForEntity(getUriWithParams(getPath, parameters), String.class);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            String body = response.getBody();
+            final String body = response.getBody();
             return objectMapper.readValue(body, new TypeReference<List<HitsDto>>() {
             });
         }
@@ -104,7 +104,7 @@ public class StatsClient implements HttpClient {
 
     private String getUriWithParams(String uri, Map<String, String> params) {
         if (params == null) return uri;
-        StringBuilder result = new StringBuilder(uri);
+        final StringBuilder result = new StringBuilder(uri);
         result.append("?");
         params.forEach((k, v) -> {
             result.append(k).append("=").append(v).append("&");

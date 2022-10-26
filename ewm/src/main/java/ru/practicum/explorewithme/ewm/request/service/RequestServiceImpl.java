@@ -57,7 +57,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public Request cancel(Long userId, Long requestId) {
-        Request request = requestRepository.findById(requestId)
+        final Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Request not found", format("RequestId=%d", requestId)));
         if (!Objects.equals(request.getRequester().getId(), userId)) {
             throw new ValidationException("Only requester can cancel request", format("UserId=%d", userId));

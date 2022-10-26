@@ -2,7 +2,6 @@ package ru.practicum.explorewithme.ewm.category.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,14 +30,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Category update(Category category) {
-        Category oldCategory = getById(category.getId());
+        final Category oldCategory = getById(category.getId());
         oldCategory.setName(category.getName());
         return save(oldCategory);
     }
 
     @Override
     public List<Category> getAll(Integer from, Integer size) {
-        Pageable pageable = OffsetLimitPageable.of(from, size);
+        final Pageable pageable = OffsetLimitPageable.of(from, size);
         return categoryRepository.findAll(pageable).getContent();
     }
 
@@ -50,15 +49,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delete(Long id) {
-        //TODO check no events
-        try {
+        final Category category = getById(id);
+        if (category.getEvents().isEmpty()) {
             categoryRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new NotFoundException("Category not found", format("Id=%d", id));
+        } else {
+            throw new ConflictException("Category contains events can not be deleted", "");
         }
     }
 
-    private Category save(Category category){
+    private Category save(Category category) {
         try {
             return categoryRepository.save(category);
         } catch (DataIntegrityViolationException ex) {

@@ -1,8 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="StatsServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-    <option name="ACTIVE_PROFILES" value="dev" />
+  <configuration default="false" name="StatsServer" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="ru.practicum.explorewithme.statsserver.StatsServer" />
     <module name="stats" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="ru.practicum.explorewithme.statsserver.StatsServer" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="ru.practicum.explorewithme.statsserver.*" />
