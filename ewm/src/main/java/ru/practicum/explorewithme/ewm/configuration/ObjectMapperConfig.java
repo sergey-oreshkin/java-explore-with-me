@@ -21,11 +21,11 @@ public class ObjectMapperConfig {
 
     @Bean
     public ObjectMapper objectMapper() {
-        JavaTimeModule module = new JavaTimeModule();
-        LocalDateTimeDeserializer localDateTimeDeserializer = new LocalDateTimeDeserializer(
+        final JavaTimeModule module = new JavaTimeModule();
+        final LocalDateTimeDeserializer localDateTimeDeserializer = new LocalDateTimeDeserializer(
                 DateTimeFormatter.ofPattern(propertiesService.getDateTimeFormat())
         );
-        LocalDateTimeSerializer localDateTimeSerializer = new LocalDateTimeSerializer(
+        final LocalDateTimeSerializer localDateTimeSerializer = new LocalDateTimeSerializer(
                 DateTimeFormatter.ofPattern(propertiesService.getDateTimeFormat())
         );
         module.addDeserializer(LocalDateTime.class, localDateTimeDeserializer);

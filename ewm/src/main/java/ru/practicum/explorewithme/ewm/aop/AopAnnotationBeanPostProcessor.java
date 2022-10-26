@@ -14,8 +14,8 @@ import java.util.Objects;
 public class AopAnnotationBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        Method[] methods = bean.getClass().getMethods();
-        Arrays.stream(methods).filter(m -> Objects.nonNull(m.getAnnotation(ControllerLog.class)))
+        final Method[] methods = bean.getClass().getMethods();
+        Arrays.stream(methods).filter(method -> Objects.nonNull(method.getAnnotation(ControllerLog.class)))
                 .forEach(m -> {
                     if (!List.of(m.getParameterTypes()).contains(HttpServletRequest.class)) {
                         throw new MethodArgumentMismatchException(

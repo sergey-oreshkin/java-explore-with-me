@@ -2,8 +2,8 @@ package ru.practicum.explorewithme.ewm.compilation.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
@@ -15,7 +15,8 @@ public class NewCompilationDto {
 
     private List<Long> events;
 
-    @NotBlank
+    @NotNull
+    @Size(max = 1024)
     private String title;
 
     @NotNull

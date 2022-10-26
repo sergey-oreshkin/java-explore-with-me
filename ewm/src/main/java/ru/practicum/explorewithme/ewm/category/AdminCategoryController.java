@@ -24,13 +24,13 @@ public class AdminCategoryController {
 
     @PostMapping
     public CategoryDto create(@Valid @RequestBody CategoryDto categoryDto) {
-        Category category = mapper.toEntity(categoryDto);
+        final Category category = mapper.toEntity(categoryDto);
         return mapper.toDto(categoryService.create(category));
     }
 
     @PatchMapping
     public CategoryDto update(@Valid @RequestBody CategoryDto categoryDto) {
-        Category category = mapper.toEntity(categoryDto);
+        final Category category = mapper.toEntity(categoryDto);
         return mapper.toDto(categoryService.update(category));
     }
 

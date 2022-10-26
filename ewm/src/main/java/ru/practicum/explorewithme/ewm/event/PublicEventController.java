@@ -9,7 +9,6 @@ import ru.practicum.explorewithme.ewm.common.SortType;
 import ru.practicum.explorewithme.ewm.event.dto.EventPublicDto;
 import ru.practicum.explorewithme.ewm.event.service.EventMapper;
 import ru.practicum.explorewithme.ewm.event.service.EventService;
-import ru.practicum.explorewithme.ewm.stats.HttpClient;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
@@ -26,8 +25,6 @@ public class PublicEventController {
     private final EventService eventService;
 
     private final EventMapper eventMapper;
-
-    private final HttpClient client;
 
     @GetMapping("{eventId}")
     @ControllerLog(sendStats = true)
