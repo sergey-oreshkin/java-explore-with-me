@@ -43,10 +43,10 @@ class RequestServiceImplTest {
     @Test
     void create_shouldInvokeRequestRepositoryAndReturnTheSame() {
 
-        User requester = User.builder().id(DEFAULT_ID).build();
-        User initiator = User.builder().id(ANOTHER_ID).build();
-        Event event = Event.builder().id(DEFAULT_ID).initiator(initiator).state(EventState.PUBLISHED).requestModeration(true).build();
-        Request request = Request.builder().id(DEFAULT_ID).event(event).requester(requester).build();
+        final User requester = User.builder().id(DEFAULT_ID).build();
+        final User initiator = User.builder().id(ANOTHER_ID).build();
+        final Event event = Event.builder().id(DEFAULT_ID).initiator(initiator).state(EventState.PUBLISHED).requestModeration(true).build();
+        final Request request = Request.builder().id(DEFAULT_ID).event(event).requester(requester).build();
 
         when(requestRepository.findByRequesterIdAndEventId(request.getRequester().getId(), request.getEvent().getId()))
                 .thenReturn(Optional.empty());
@@ -76,7 +76,7 @@ class RequestServiceImplTest {
 
     @Test
     void getAllByRequester_shouldReturnTheSame() {
-        Request request = Request.builder().id(DEFAULT_ID).build();
+        final Request request = Request.builder().id(DEFAULT_ID).build();
         when(requestRepository.findAllByRequesterId(anyLong())).thenReturn(List.of(request));
 
         var result = requestService.getAllByRequester(anyLong());
@@ -88,7 +88,7 @@ class RequestServiceImplTest {
 
     @Test
     void cancel_shouldInvokeRequestRepositoryDelete() {
-        Request request = Request.builder()
+        final Request request = Request.builder()
                 .id(DEFAULT_ID)
                 .requester(User.builder().id(ANOTHER_ID).build())
                 .build();
@@ -109,7 +109,7 @@ class RequestServiceImplTest {
 
     @Test
     void cancel_shouldThrow_whenUserIsNotRequester() {
-        Request request = Request.builder()
+        final Request request = Request.builder()
                 .id(DEFAULT_ID)
                 .requester(User.builder().id(ANOTHER_ID).build())
                 .build();

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 
@@ -14,7 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RequestDto {
     private Long id;
+    @NotNull
     private Long requester;
+    @NotNull
     private Long event;
     private RequestState status;
     private LocalDateTime created;

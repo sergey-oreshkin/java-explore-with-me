@@ -21,7 +21,7 @@ public class RequestController {
 
     @PostMapping
     public RequestDto create(@PathVariable @NotNull Long userId, @RequestParam Long eventId) {
-        Request request = mapper.getEntity(userId, eventId);
+        final Request request = mapper.getEntity(userId, eventId);
         return mapper.toDto(requestService.create(request));
     }
 

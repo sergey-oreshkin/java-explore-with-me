@@ -43,7 +43,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void pin(Long compId, boolean pinned) {
-        Compilation compilation = getCompilationOrThrow(compId);
+        final Compilation compilation = getCompilationOrThrow(compId);
         compilation.setPinned(pinned);
         compilationRepository.save(compilation);
     }
@@ -51,8 +51,8 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void addEvent(Long compId, Long eventId) {
-        Compilation compilation = getCompilationOrThrow(compId);
-        Event event = eventFactory.getById(eventId);
+        final Compilation compilation = getCompilationOrThrow(compId);
+        final Event event = eventFactory.getById(eventId);
         if (compilation.getEvents().contains(event)) {
             throw new ValidationException("Event already in te compilation", format("EventId=%d", eventId));
         }
@@ -63,8 +63,8 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void deleteEvent(Long compId, Long eventId) {
-        Compilation compilation = getCompilationOrThrow(compId);
-        Event event = eventFactory.getById(eventId);
+        final Compilation compilation = getCompilationOrThrow(compId);
+        final Event event = eventFactory.getById(eventId);
         if (!compilation.getEvents().contains(event)) {
             throw new ValidationException("The event is not in the compilation", format("EventId=%d", eventId));
         }
@@ -74,7 +74,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public List<Compilation> getAll(Integer from, Integer size, Boolean pinned) {
-        Pageable pageable = OffsetLimitPageable.of(from, size);
+        final Pageable pageable = OffsetLimitPageable.of(from, size);
         if (Objects.nonNull(pinned)) {
             return compilationRepository.findAllByPinned(pinned, pageable);
         }

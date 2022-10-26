@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import ru.practicum.explorewithme.ewm.category.db.Category;
 import ru.practicum.explorewithme.ewm.compilation.db.Compilation;
 import ru.practicum.explorewithme.ewm.event.dto.EventState;
@@ -33,12 +35,15 @@ public class Event {
 
     private String annotation;
 
+    private String adminComment;
+
     @ManyToOne
     @JoinColumn(name = "initiator")
     private User initiator;
 
     @ManyToOne
     @JoinColumn(name = "category")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
     private String description;
@@ -71,6 +76,7 @@ public class Event {
     Set<Request> requests = new HashSet<>();
 
     @ManyToMany(mappedBy = "events")
+    @JsonIgnore
     Set<Compilation> compilations = new HashSet<>();
 
     @Override

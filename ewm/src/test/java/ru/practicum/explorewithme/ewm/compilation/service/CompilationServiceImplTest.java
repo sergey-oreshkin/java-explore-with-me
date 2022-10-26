@@ -37,7 +37,7 @@ class CompilationServiceImplTest {
 
     @Test
     void create_shouldInvokeRepositoryAndReturnTheSame() {
-        Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
+        final Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
         when(compilationRepository.save(compilation)).thenReturn(compilation);
 
         var result = compilationService.create(compilation);
@@ -57,7 +57,7 @@ class CompilationServiceImplTest {
 
     @Test
     void pin_shouldInvokeRepository() {
-        Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
+        final Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
         when(compilationRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(compilation));
 
         compilationService.pin(DEFAULT_ID, true);
@@ -67,7 +67,7 @@ class CompilationServiceImplTest {
 
     @Test
     void addEvent_shouldInvokeRepository() {
-        Compilation compilation = Compilation.builder().id(DEFAULT_ID).events(new HashSet<>()).build();
+        final Compilation compilation = Compilation.builder().id(DEFAULT_ID).events(new HashSet<>()).build();
         when(compilationRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(compilation));
 
         compilationService.addEvent(DEFAULT_ID, DEFAULT_ID);
@@ -77,10 +77,10 @@ class CompilationServiceImplTest {
 
     @Test
     void deleteEvent_shouldInvokeRepository() {
-        Event event = Event.builder().id(DEFAULT_ID).build();
-        Set<Event> events = new HashSet<>();
+        final Event event = Event.builder().id(DEFAULT_ID).build();
+        final Set<Event> events = new HashSet<>();
         events.add(event);
-        Compilation compilation = Compilation.builder().id(DEFAULT_ID).events(events).build();
+        final Compilation compilation = Compilation.builder().id(DEFAULT_ID).events(events).build();
         when(compilationRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(compilation));
         when(eventFactory.getById(DEFAULT_ID)).thenReturn(event);
 
@@ -91,7 +91,7 @@ class CompilationServiceImplTest {
 
     @Test
     void getAll_shouldInvokeFindAllByPinnedAndReturnTheSame_whenPinnedIsNotNull() {
-        Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
+        final Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
         when(compilationRepository.findAllByPinned(eq(true), any(OffsetLimitPageable.class))).thenReturn(List.of(compilation));
 
         var result = compilationService.getAll(0, 10, true);
@@ -105,7 +105,7 @@ class CompilationServiceImplTest {
 
     @Test
     void getAll_shouldInvokeFindAllAndReturnTheSame_whenPinnedIsNull() {
-        Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
+        final Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
         when(compilationRepository.findAll(any(OffsetLimitPageable.class))).thenReturn(new PageImpl<>(List.of(compilation)));
 
         var result = compilationService.getAll(0, 10, null);
@@ -119,7 +119,7 @@ class CompilationServiceImplTest {
 
     @Test
     void getById_shouldReturnTheSame() {
-        Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
+        final Compilation compilation = Compilation.builder().id(DEFAULT_ID).build();
         when(compilationRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(compilation));
 
         var result = compilationService.getById(DEFAULT_ID);

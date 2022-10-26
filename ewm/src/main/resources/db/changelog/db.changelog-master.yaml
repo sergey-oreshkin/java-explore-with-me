@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/changeset/create-table-compilations.yaml
   - include:
       file: db/changelog/changeset/create-table-events_compilation.yaml
+  - include:
+      file: db/changelog/changeset/add-admin-comment-to-event.yaml

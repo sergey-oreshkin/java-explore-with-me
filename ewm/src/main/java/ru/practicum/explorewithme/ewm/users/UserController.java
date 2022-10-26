@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping
     public UserDto create(@Valid @RequestBody UserDto userDto) {
-        User user = mapper.toEntity(userDto);
+        final User user = mapper.toEntity(userDto);
         return mapper.toDto(userService.create(user));
     }
 

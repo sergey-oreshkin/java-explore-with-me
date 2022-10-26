@@ -4,46 +4,30 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.practicum.explorewithme.ewm.category.dto.CategoryDto;
+import ru.practicum.explorewithme.ewm.users.dto.ShortUserDto;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewEventDto {
-
-    private Long eventId;
-
-    @NotNull
-    @Size(max = 1024)
+public class EventPublicDto {
+    private Long id;
     private String title;
-
-    @NotBlank
     private String description;
-
-    @NotBlank
     private String annotation;
-
-    @NotNull
-    private Integer category;
-
-    @NotNull
+    private CategoryDto category;
+    private ShortUserDto initiator;
+    private long confirmedRequests;
+    private LocalDateTime createdOn;
     private LocalDateTime eventDate;
-
-    @NotNull
     private Boolean paid;
-
-    @NotNull
-    @Min(value = 0L)
     private Integer participantLimit;
-
-    @NotNull
+    private LocalDateTime publishedOn;
     private Boolean requestModeration;
-
+    private EventState state;
     private Location location;
+    private long views;
 }
